@@ -1,5 +1,8 @@
-/* Ver. 8 	-	dictCpp.cpp
+/* Ver. 9	-	dictCpp.cpp
 
+1.)
+still fighting with merge_dictionary( )
+but the other functions are OK now :D
 
  */
 
@@ -17,6 +20,10 @@
 #define MAX_WORD_NUM 10000
 #define DOC_NUM 1095
 #define DICT_SIZE 1000/* dictionary size : total number of tokens of all docs.*/
+
+#define EARLIER 0
+#define LATER 1 
+#define SAME 2
 using namespace std;
 
 
@@ -27,27 +34,45 @@ struct ListNode
 	ListNode  *next ;
 };
 
-/******************************************************************************/
-ListNode *merge_dictionary(const ListNode *h1, const ListNode *h2, ListNode *&result )
-{
+/* - - - - - - - - - - - - - - - */
+	ListNode *newTermsNode;
+	ListNode *currDictNode;  /* is first updated by duplicate_currDict( ) */
+	/* currDictNode currDictNode is just for temporary backup. */
+	/* It will hold the copy of ListNode *&dictNode*/
+/* - - - - - - - - - - - - - - - */
 
-	/*-------------------*/
 	ListNode dummy;
 	ListNode *tail;
-	/*-------------------*/
+	char buff1[ MAX_STR_LEN ];
+	char buff2[ MAX_STR_LEN ];
 	
+/******************************************************************************/
+ListNode *merge_dictionary( ListNode *&h1, ListNode *&h2, ListNode *&result )
+{
+	/*-------------------*/ 
+   int flag;
+	/*-------------------*/
+	printf("\n\nh1->item : %c. h2->item : %c.", h1->item, h2->item );
 	for ( tail=&dummy; h1 != NULL || h2 != NULL; tail=tail->next ){
-		tail->next = new ListNode;
-		 
-	   if( h1==NULL || h2 !=NULL ){
+		printf("\nHello ");
+		//tail->next = ListNode;
+		printf("\nHello new ");
+		buff1[0] = h1->item[0];
+		printf("\nHello buff1" );
+		flag = strncmp( h1->item, h2->item, MAX_STR_LEN );
+		printf("\nHello flag ");
+		/* If strncmp( A, B ) > 0, then the order shold be ... -> B -> A -> ... */
+	   if( h1==NULL || ( h2 !=NULL && flag > 0 ) ){
 	   /* original : if( h1==NULL || h2 !=NULL && h2->item < h1->item)){
 			*/
 			/* Nicole wants to use a flag instead ! */
 			/* original : tail->next->item = h2->item; */
 			strncpy( tail->next->item, h2->item, MAX_STR_LEN );
+			//printf("\nHello strncpy ");
 			h2 = h2->next;
+			printf("\nHello h2 = h2->next ");
 		} /* end if */
-		else{
+		else if ( h2==NULL || ( h1!=NULL && flag <= 0 ) ){
 		   /* original : tail->next->item = h1->item; */
 		   strncpy( tail->next->item, h1->item, MAX_STR_LEN );
 		   h1 = h1->next;
@@ -63,7 +88,7 @@ ListNode *merge_dictionary(const ListNode *h1, const ListNode *h2, ListNode *&re
 /*-------------------*/
 	
 /*-------------------*/
-void arrayToListNode(char inputArr[][ MAX_STR_LEN ], int & tokenSize, ListNode *tail2 )
+void arrayToListNode(char inputArr[][ MAX_STR_LEN ], int & tokenSize, ListNode *&tail2 )
 {
 	printf("\nEnter : arrayToListNode( ) ." );
 	printf("\nIn arrayToListNode : tokenSize is : %d.", tokenSize );
@@ -75,7 +100,7 @@ void arrayToListNode(char inputArr[][ MAX_STR_LEN ], int & tokenSize, ListNode *
 		
 		tail2->next = new ListNode;
 		strncpy( tail2->next->item, inputArr[i], MAX_STR_LEN );
-		printf("\n The content of tail2 is %s.", tail2->item ); 
+		// 	printf("\n The content of tail2 is %s.", tail2->item ); 
 		tail2 = tail2->next;
 	}						/* End for */
 	tail2->next = NULL;
@@ -92,33 +117,32 @@ ListNode *duplicate_currDict( ListNode *&h1, ListNode *&h2 )
 	/* h1 will be the copy of h2. */
 	/* h2 is global in main.cpp. h1 can only be seen in dictCpp.cpp  */
 	
-	int i = 0;	
 	
+	int i = 0;
 	/* first node : special case : */
 	h1 = new ListNode;
-	
-	while( h2 != NULL ){
-		
+	if(h2->item == NULL )
+	printf( "\n\n\n         h2->item is NULL ! ");
+	while( h2->item != NULL ){
+		printf( "\nHello h2->item != NULL        : >> " );
 		h1->next = new ListNode;
 		strncpy( h1->next->item, h2->item, MAX_STR_LEN );
-		printf("\n The content of currDictNode is %s.", h1->item ); 
+		printf("\nc The content of currDictNode is %s.", h1->item ); 
+		printf("\n\ncurrDictNode->item is : %s.", currDictNode->item );
 		h1 = h1->next;
 		h2 = h2->next;
 	}						/* End while */
 	
 	h1->next = NULL;
-	
+	printf("In duplicate_currDict( ) : \n");
+	printf("\n\ncurrDictNode->item is : %s.", currDictNode->item );
 }						/* End duplicate_currDict( ) */
 
-/* - - - - - - - - - - - - - - - */
 
-/* - - - - - - - - - - - - - - - */
-void arrayToDict( char inputArr[][ MAX_STR_LEN ], int & tokenSize, ListNode *&dictNode )
+ListNode *arrayToDict( char inputArr[][ MAX_STR_LEN ], int & tokenSize, ListNode *&dictNode )
 {
-	ListNode *newTermsNode;
-	ListNode *currDictNode;  /* is first updated by duplicate_currDict( ) */
-	/* currDictNode currDictNode is just for temporary backup. */
-	/* It will hold the copy of ListNode *&dictNode*/
+
+	printf(" \n\n\n\n			In arrayToDict : dictNode->item is %s.\n\n\n\n		------------", dictNode->item );
 	
 	arrayToListNode( inputArr, tokenSize, newTermsNode );
 	/* PPS. inputArr[][] is the new coming content of xxx.txt, and the content */
@@ -126,8 +150,8 @@ void arrayToDict( char inputArr[][ MAX_STR_LEN ], int & tokenSize, ListNode *&di
 	
 	duplicate_currDict( currDictNode, dictNode );
 	/* dictNode is the global dictionary in main(). currDictNode is just for temporary backup */
-	
-	merge_dictionary( newTermsNode, currDictNode, dictNode );
+	printf( "\n\n\n\nHello. After duplicate_currDict( ), newTermsNode->item is %s. ", newTermsNode->item );
+	//merge_dictionary( newTermsNode, currDictNode, dictNode );
 
 }
 

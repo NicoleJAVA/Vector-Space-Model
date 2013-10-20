@@ -43,8 +43,8 @@ Nicole adds this line of code in porter( ) : 	rewind(f);
 #define MAX_STOP_SIZE 500
 #define APPEND 0
 #define RMV 1 
-#define MAX_WORD_NUM 10000
-#define DOC_NUM 1095
+#define MAX_WORD_
+#define DOC_NUM 1095NUM 10000
 #define DICT_SIZE 1000/* dictionary size : total number of tokens of all docs.*/
 using namespace std;
 /*((((((((((((((((((((((((((((((((((((((((((((((((*/
@@ -278,7 +278,11 @@ int main()
 	/* holds the stemming result of afile.txt. */					
 	/* pre-condition : tokenSize is correctly updated*/					
 					
-	arrayToListNode( stemByPorter, tokenSize, dictNode );				
+	arrayToListNode( stemByPorter, tokenSize, dictNode );
+	printf(" \n\n\n\n		In main : dictNode->item is %s.\n\n\n\n				------------", dictNode->item );
+	
+	arrayToDict( stemByPorter, tokenSize, dictNode );	
+
  		/*--------------------------------------------------------*/ 
    }  							/* END 2-if-else */
    	printf("\n\n\n\n\n			  E N D - Testing arrayToListNode - E N D - \n\n\n\n\n" );	
@@ -356,7 +360,7 @@ for( int docLoop = 1; docLoop <= 5; docLoop ++ )
 	/* holds the stemming result of afile.txt. */					
 	/* pre-condition : tokenSize is correctly updated*/					
 					
-	arrayToDict( stemByPorter, tokenSize );				
+				
 					
 					
 					/* - - - - - - - - - - - - - - - */
