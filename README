@@ -1,0 +1,52 @@
+
+2013. 10. 20	>> Week 6	>> Sunday
+when migrating from dev cpp to visual studio c++,
+put this into >> project properties >> C/C++ >> other include directory : C:\Dev-Cpp\include
+
+бн [ B U G ] :
+ fatal error C1021: invalid preprocessor command 'include_next'║A
+[ Solution ] : 
+In control pannel, msvc's include should be prior to mingw's include.
+ C:/Program Files/Microsoft Visual Studio/VC98/atl/include;C:/Program Files/Microsoft Visual Studio/VC98/mfc/include;C:/Program Files/Microsoft Visual Studio/VC98/include;C:/Modeltech_6.3f/include;C:/Program Files/Microsoft DirectX 9.0 SDK (February 2005)/Samples/C++/DirectShow/Samples/C++/DirectShow/BaseClasses;C:/Modeltech_6.3f/gcc-3.3.1-mingw32/include
+
+ ( tutorial : http://blog.csdn.net/aboy85/article/details/4208915 )
+ 
+ 
+бн [ B U G ] : 
+when I do rmvStop() in a loop in main() many times, at first, the program runs well.
+but in the 4-th loop, main() can't recive a succussful-return from rmvStop().
+[ Solution ] : 
+So I print out some codes in rmvStop().
+And then I observed that, 
+
+	...
+	stopNum is :  319  .
+	tokenSize is : 300 .
+	...
+	stopNum is :  638  .
+	tokenSize is : 300 .
+	...
+	stopNum is :  957  .
+	tokenSize is : 300 .
+ 
+Therefore, in txtToArray(), I must reset stopNum to zero.
+SO COOL !!!!!!!  The bug is fixed !!!
+ 
+бн [ B U G ] : 
+I need to press "Enter" key on keyboard 1095 times for the for-loop in main( ) to loop 1095 times.
+Solution : 
+Yeah ! Nicole debugs successfully by herself ! 
+Discard this line in porter.cpp : system("PAUSE");
+
+бн [ B U G ] :
+Too many open files 
+In iteration xxxx i get an "Too many open files" error when opening the xxxx-th file.
+Solution : 
+Yeah ! Nicole debugs successfully by herself ! 
+Nicole must add this line of code in function txtToArray( ) : 
+	   fclose(txtFile);
+
+Haha ! Don't forget that txtFile is declared 1095 times because everytime when txtToArray( ) is entered, 
+this line will declare again txtFile : void txtToArray( FILE *txtFile, char twoDimArr[][ MAX_STR_LEN ], int & wordCount )	 
+Haha ! Just be careful !   
+	   
