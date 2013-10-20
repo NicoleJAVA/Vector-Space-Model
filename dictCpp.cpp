@@ -15,6 +15,7 @@
 using namespace std;
 
 
+
 struct ListNode
 {
 	char item[ MAX_STR_LEN ] ;
@@ -56,10 +57,28 @@ ListNode *merge(const ListNode *h1, const ListNode *h2, ListNode *&result )
 }
 
 /******************************************************************************/
-void arrayToListNode()
+/*-------------------*/
+
+/*-------------------*/
+void arrayToListNode(char inputArr[][ MAX_STR_LEN ], int & tokenSize )
 {
-	printf("\nEnter arrayToListNode( ) ." );
+	printf("\nEnter : arrayToListNode( ) ." );
+	printf("\nIn arrayToListNode : tokenSize is : %d.", tokenSize );
+	ListNode dummy2;
+	ListNode *tail2;
+	int i = 0;	
 	
+	i = 0;
+	tail2 = &dummy2;
+	for( i = 0; i < tokenSize; i++ ){
+		
+		tail2->next = new ListNode;
+		strncpy( tail2->next->item, inputArr[i], MAX_STR_LEN );
+		printf("\n The content of tail2 is %s.", tail2->item ); 
+		tail2 = tail2->next;
+	}					/* End for */
+	printf("\nIn arrayToListNode : token[ %d ].", i );
+
 } /* end arrayToListNode( ) */
 
 
