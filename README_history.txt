@@ -1,4 +1,35 @@
- 
+ /* ver. 7
+
+for ver.8 : be aware that for testing purpose, the loop in main 
+only execute 5 times rather than DICT_SIZE times.
+
+1.)
+Nicole creates dictionaryCpp.cpp .
+
+2.) 
+add this line of code in rmvStop( ) : clear_array( token );
+
+3.)
+For stopwordfile.txt,
+main( ) knows the existence of function txtToAarray( ).
+But for every xxx.txt,
+main( ) DOES NOT KNOW the existence of function txtToAarray( ).
+Only rmvStop( ) knows it.
+
+4.)
+porter( ) now recives one more argument : FILE * f 
+Therefore, this line of code is discarded in porter( ) : 
+		f = fopen( "afile.txt" ,"r");
+And then, these lines of code are added into main( ) :
+		FILE * stemFile;    pointer stemFile will be passed to poter( ) 
+		stemFile = fopen( "afile.txt" ,"r");
+  		porter( 1, stemByPorter, tokenSize, stemFile );
+  		fclose(stemFile);
+  		
+5.) 
+Nicole adds this line of code in porter( ) : 	rewind(f);
+( Because if f is not rewound, then int & tokenSize won't get the correct value )
+ */
 
  /*--------------------------------------------*/
  /* ver. 6

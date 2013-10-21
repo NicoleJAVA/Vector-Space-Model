@@ -1,4 +1,4 @@
-/* Ver. 9	-	dictCpp.cpp
+/* Ver. 9 - dictCpp.cpp
 
 1.)
 still fighting with merge_dictionary( )
@@ -90,17 +90,21 @@ ListNode *merge_dictionary( ListNode *&h1, ListNode *&h2, ListNode *&result )
 /*-------------------*/
 void arrayToListNode(char inputArr[][ MAX_STR_LEN ], int & tokenSize, ListNode *&tail2 )
 {
-	printf("\nEnter : arrayToListNode( ) ." );
-	printf("\nIn arrayToListNode : tokenSize is : %d.", tokenSize );
-	ListNode dummy2; 
+	printf("\n進入Enter : arrayToListNode( ) ." );
+	printf("\nIn arrayToListNode : tokenSize is : %d.\n\n\n\n", tokenSize );
+	
+	ListNode * dummy2; 
+	dummy2 = new ListNode; /* 原來關鍵是要加上這一句呵呵呵 */
 	/* PPS. address of dummy2 is fixed bcause dummy2 is statically allocated*/
 	int i = 0;	
-	tail2 = &dummy2;
+	tail2 = dummy2;
+	//printf("\nHello tail2 = dummy2 拉拉拉拉." ); 
 	for( i = 0; i < tokenSize; i++ ){
-		
+		printf("\n\nIn arrayToListNode : the %d-th loop.", i );
 		tail2->next = new ListNode;
+		//printf("\nHello the %d-th dynamic allocate 第 %d 次的動態記憶體", i, i ); 
 		strncpy( tail2->next->item, inputArr[i], MAX_STR_LEN );
-		// 	printf("\n The content of tail2 is %s.", tail2->item ); 
+		printf("\n The content of tail2 is %s. ( Chinese: tail2->item 的內容 ) ", tail2->item ); 
 		tail2 = tail2->next;
 	}						/* End for */
 	tail2->next = NULL;

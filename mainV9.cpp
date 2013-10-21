@@ -1,35 +1,12 @@
-/* ver. 7
+/* ver. 10
 
-for ver.8 : be aware that for testing purpose, the loop in main 
-only execute 5 times rather than DICT_SIZE times.
+1.) Now dictionary can be successfully converted into a dynamic linked list.
+	(   -    via function arrayToListNode( );    -   )
+	
+	
+*/
 
-1.)
-Nicole creates dictionaryCpp.cpp .
 
-2.) 
-add this line of code in rmvStop( ) : clear_array( token );
-
-3.)
-For stopwordfile.txt,
-main( ) knows the existence of function txtToAarray( ).
-But for every xxx.txt,
-main( ) DOES NOT KNOW the existence of function txtToAarray( ).
-Only rmvStop( ) knows it.
-
-4.)
-porter( ) now recives one more argument : FILE * f 
-Therefore, this line of code is discarded in porter( ) : 
-		f = fopen( "afile.txt" ,"r");
-And then, these lines of code are added into main( ) :
-		FILE * stemFile;    pointer stemFile will be passed to poter( ) 
-		stemFile = fopen( "afile.txt" ,"r");
-  		porter( 1, stemByPorter, tokenSize, stemFile );
-  		fclose(stemFile);
-  		
-5.) 
-Nicole adds this line of code in porter( ) : 	rewind(f);
-( Because if f is not rewound, then int & tokenSize won't get the correct value )
- */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
@@ -278,6 +255,7 @@ int main()
 	/* holds the stemming result of afile.txt. */					
 	/* pre-condition : tokenSize is correctly updated*/					
 					
+	printf("\n先把字典變成 listnode"); 
 	arrayToListNode( stemByPorter, tokenSize, dictNode );
 	printf(" \n\n\n\n		In main : dictNode->item is %s.\n\n\n\n				------------", dictNode->item );
 	
@@ -312,7 +290,7 @@ int main()
  
  
    
-for( int docLoop = 1; docLoop <= 5; docLoop ++ )
+for( int docLoop = 1; docLoop <= 0; docLoop ++ )
 {    
 	printf("\n\n\n\n\n------------------------------" );
 	printf("\ndocument %d.txt", docLoop );	
