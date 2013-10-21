@@ -1,3 +1,22 @@
+ GitHub README_history.txt
+ 
+ /*
+Ver. 11
+
+1.)
+I don't use arrayname[ ] declaration.
+Instead, use std::string stringname declaration.
+2.)
+If currentPtr->data is the first node, this node is empty, and strncmp() will crash becuse this is NULL.
+So, Nicole adds the following : 
+		...
+		if( previousPtr != NULL ){   
+			termOrder = strncmp( value.c_str(), currentPtr->data.c_str(), value.size());
+		}
+		while ( currentPtr != NULL && termOrder > 0 && previousPtr != NULL ) { 
+		...
+*/
+ 
  /* ver. 7
 
 for ver.8 : be aware that for testing purpose, the loop in main 
