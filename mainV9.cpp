@@ -21,7 +21,9 @@
 #define APPEND 0
 #define RMV 1 
 #define MAX_WORD_
-#define DOC_NUM 1095NUM 10000
+#ifndef DOC_NUM
+#define DOC_NUM 1095
+#endif
 #define DICT_SIZE 1000/* dictionary size : total number of tokens of all docs.*/
 using namespace std;
 /*((((((((((((((((((((((((((((((((((((((((((((((((*/
