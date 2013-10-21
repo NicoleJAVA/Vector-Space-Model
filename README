@@ -1,7 +1,64 @@
 
+2013. 10. 21    >> Week 7   >> Monday
+
+---
+
+бн [ B U G ] :
+[ Where ] : sort_firstDict.cpp
+[ B U G ] : I printf each line. I found that strncmp( newPtr->data, value, MAX_STR_LEN ) will CRASH.
+[ Solution ] : 
+tutorial : http://stackoverflow.com/questions/1623769/is-there-any-safe-strcmp/1623778#1623778
+
+<<
+
+take a look, what the US DHS National Cyber Security Division recommends on this matter:
+Ensure that strings are null terminated before passing into strcmp. This can be enforced by always placing a \0 in the last allocated byte of the buffer.
+char str1[] ="something";
+char str2[] = "another thing";
+/* In this case we know strings are null terminated. Pretend we don't. */
+str1[sizeof(str1)-1] = '\0';
+str2[sizeof(str2)-1] = '\0';
+/* Now the following is safe. */
+if (strcmp(str1, str2)) { /* do something */ } else { /* do something 
+
+>>   // End tutorial
+
+HOWEVER, 
+array[ ] is more like a "C-stlye" thing.
+and many tutorials sugget that : Don't use array[]; instead, use std::string stringname 
+
+
+бн[ B U G ]:
+no matching function for call to `strncmp(std::string&, char*&, int)'
+[ Solution ] :
+( PPS. from now on, I start my std::string life-style ! )
+Wrong code : 
+strcmp (word1, word2) 
+Corrct code : 
+x = strcmp(word1.c_str(), word2.c_str());
+
+---
+
+бн [ B U G ]: sort_firstDict_ver_string.cpp
+
+
+FINALLY, it's not because of the usage of strncmp( ) .
+It's because adding the first listNode is a SPECIAL CASE !!!!
+So Nicole adds these lines of code : 
+
+		if( previousPtr != NULL ){ /* If currentPtr->data is the first node, this node is empty, and strncmp() will crash becuse this is NULL */
+			termOrder = strncmp( value.c_str(), currentPtr->data.c_str(), value.size());
+		}
+      while ( currentPtr != NULL && termOrder > 0 && previousPtr != NULL ) { 
+
+IMPORTANT ! If currentPtr->data is the first node, this node is empty, and strncmp() will CRASH becuse this is NULL.
+	
+/*==========================================================================*/
 2013. 10. 20	>> Week 6	>> Sunday
 when migrating from dev cpp to visual studio c++,
 put this into >> project properties >> C/C++ >> other include directory : C:\Dev-Cpp\include
+
+---
 
 бн [ B U G ] :
  fatal error C1021: invalid preprocessor command 'include_next'║A
@@ -11,6 +68,7 @@ In control pannel, msvc's include should be prior to mingw's include.
 
  ( tutorial : http://blog.csdn.net/aboy85/article/details/4208915 )
  
+---
  
 бн [ B U G ] : 
 when I do rmvStop() in a loop in main() many times, at first, the program runs well.
@@ -32,11 +90,15 @@ And then I observed that,
 Therefore, in txtToArray(), I must reset stopNum to zero.
 SO COOL !!!!!!!  The bug is fixed !!!
  
+--- 
+ 
 бн [ B U G ] : 
 I need to press "Enter" key on keyboard 1095 times for the for-loop in main( ) to loop 1095 times.
 Solution : 
 Yeah ! Nicole debugs successfully by herself ! 
 Discard this line in porter.cpp : system("PAUSE");
+
+---
 
 бн [ B U G ] :
 Too many open files 
@@ -46,7 +108,10 @@ Yeah ! Nicole debugs successfully by herself !
 Nicole must add this line of code in function txtToArray( ) : 
 	   fclose(txtFile);
 
-Haha ! Don't forget that txtFile is declared 1095 times because everytime when txtToArray( ) is entered, 
+Ha~ Don't forget that txtFile is declared 1095 times because everytime when txtToArray( ) is entered, 
 this line will declare again txtFile : void txtToArray( FILE *txtFile, char twoDimArr[][ MAX_STR_LEN ], int & wordCount )	 
-Haha ! Just be careful !   
+Ha~ Just be careful !   
+	   
+	   
+---	   
 	   

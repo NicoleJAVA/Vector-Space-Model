@@ -4,6 +4,15 @@ Ver. 11
 1.)
 I don't use arrayname[ ] declaration.
 Instead, use std::string stringname declaration.
+2.)
+If currentPtr->data is the first node, this node is empty, and strncmp() will crash becuse this is NULL.
+So, Nicole adds the following : 
+		...
+		if( previousPtr != NULL ){   
+			termOrder = strncmp( value.c_str(), currentPtr->data.c_str(), value.size());
+		}
+		while ( currentPtr != NULL && termOrder > 0 && previousPtr != NULL ) { 
+		...
 */
 
 /* Fig. 12.3: fig12_03.c
@@ -117,37 +126,32 @@ void insert( ListNodePtr *sPtr, std::string value )
 	newPtr = new ListNode; /* new will return the address */
 	printf("\nHello insert >> newPtr = new ListNode." );
 	
-   if ( newPtr != NULL ) { /* is space available */
-   
-   	printf("\nHello insert >>  if ( newPtr != NULL ) " );
-      // original code : newPtr->data = value; /* place value in node */
-      strncmp( newPtr->data.c_str(), value.c_str() , MAX_STR_LEN );
-      printf("\nHello insert >>  strncmp " );
+	/*									->		if newPtr is space available */
+   if ( newPtr != NULL ) { 
+
       newPtr->nextPtr = NULL; /* node does not link to another node */
 
       previousPtr = NULL;
       currentPtr = *sPtr;
-		printf("\nHello insert >>  currentPtr = *sPtr. \n\n\n\n" );
+		
 		/* - - - - - - - - - - - - - - - - - - - - - - */
-		value[ sizeof(value) - 1 ]  = '\0';
-		printf("\nHello insert >>  value[ ... ] = null terminated." );
-		// currDataSize = currentPtr->data.length();
-		printf("\nHello insert >>  compute currDataSize." );
-		//currentPtr->data.end() = '\0';
+		value[ sizeof(value) - 1 ]  = '\0';	
 		/* - - - - - - - - - - - - - - - - - - - - - - */
-		printf("\nHello insert >>  safe strcmp\n\n\n\n" );
-		termOrder = strcmp( value.c_str(), currentPtr->data.c_str());
-		//printf("\nHello insert >>  termOrder = strcmp( ) " );
-		//printf("\nHello insert >>  termOder is : %d.", termOrder );
+		
+		if( previousPtr != NULL ){
+			termOrder = strncmp( value.c_str(), currentPtr->data.c_str(), value.size());
+		}
+
       /* loop to find the correct location in the list */
-      while ( currentPtr != NULL && termOrder > 0 ) { 
+      while ( currentPtr != NULL && termOrder > 0 && previousPtr != NULL ) { 
 			printf("\nHello insert >>  while ( currentPtr != NULL && termOrder > 0 ) { " );
          previousPtr = currentPtr;          /* walk to ...   */
          currentPtr = currentPtr->nextPtr;  /* ... next node */
       } /* end while */
 
       /* insert new node at beginning of list */
-      if ( previousPtr == NULL ) { 
+      if ( previousPtr == NULL ) {
+			printf("\nS P E C I A L   C A S E : first listNode to be inserted." ); 
          newPtr->nextPtr = *sPtr;
          *sPtr = newPtr;
       } /* end if */
@@ -162,6 +166,9 @@ void insert( ListNodePtr *sPtr, std::string value )
    } /* end else */
 
 } /* end function insert */
+
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
 /* Delete a list element */
 char deleteNode( ListNodePtr *sPtr, char value[ MAX_STR_LEN ] )
