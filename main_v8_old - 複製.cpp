@@ -1,12 +1,35 @@
-/* ver. 10
+/* ver. 7
 
-1.) Now dictionary can be successfully converted into a dynamic linked list.
-	(   -    via function arrayToListNode( );    -   )
-	
-	
-*/
+for ver.8 : be aware that for testing purpose, the loop in main 
+only execute 5 times rather than DICT_SIZE times.
 
+1.)
+Nicole creates dictionaryCpp.cpp .
 
+2.) 
+add this line of code in rmvStop( ) : clear_array( token );
+
+3.)
+For stopwordfile.txt,
+main( ) knows the existence of function txtToAarray( ).
+But for every xxx.txt,
+main( ) DOES NOT KNOW the existence of function txtToAarray( ).
+Only rmvStop( ) knows it.
+
+4.)
+porter( ) now recives one more argument : FILE * f 
+Therefore, this line of code is discarded in porter( ) : 
+		f = fopen( "afile.txt" ,"r");
+And then, these lines of code are added into main( ) :
+		FILE * stemFile;    pointer stemFile will be passed to poter( ) 
+		stemFile = fopen( "afile.txt" ,"r");
+  		porter( 1, stemByPorter, tokenSize, stemFile );
+  		fclose(stemFile);
+  		
+5.) 
+Nicole adds this line of code in porter( ) : 	rewind(f);
+( Because if f is not rewound, then int & tokenSize won't get the correct value )
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
@@ -20,10 +43,8 @@
 #define MAX_STOP_SIZE 500
 #define APPEND 0
 #define RMV 1 
-#define MAX_WORD_
-#ifndef DOC_NUM
+#define MAX_WORD_NUM 10000
 #define DOC_NUM 1095
-#endif
 #define DICT_SIZE 1000/* dictionary size : total number of tokens of all docs.*/
 using namespace std;
 /*((((((((((((((((((((((((((((((((((((((((((((((((*/
@@ -165,7 +186,7 @@ int main()
 	FILE * stopFile;
 	FILE * aFile;
 	FILE * stemFile; /* pointer stemFile will be passed to poter( ) */
-	ListNode *dictNode; /* dictionary list node */
+	
 	
 					/* - - - - - - - - - - - - - - - */
 	
@@ -257,12 +278,7 @@ int main()
 	/* holds the stemming result of afile.txt. */					
 	/* pre-condition : tokenSize is correctly updated*/					
 					
-	printf("\n先把字典變成 listnode"); 
-	arrayToListNode( stemByPorter, tokenSize, dictNode );
-	printf(" \n\n\n\n		In main : dictNode->item is %s.\n\n\n\n				------------", dictNode->item );
-	
-	arrayToDict( stemByPorter, tokenSize, dictNode );	
-
+	arrayToListNode( stemByPorter, tokenSize );				
  		/*--------------------------------------------------------*/ 
    }  							/* END 2-if-else */
    	printf("\n\n\n\n\n			  E N D - Testing arrayToListNode - E N D - \n\n\n\n\n" );	
@@ -292,7 +308,7 @@ int main()
  
  
    
-for( int docLoop = 1; docLoop <= 0; docLoop ++ )
+for( int docLoop = 1; docLoop <= 5; docLoop ++ )
 {    
 	printf("\n\n\n\n\n------------------------------" );
 	printf("\ndocument %d.txt", docLoop );	
@@ -340,7 +356,7 @@ for( int docLoop = 1; docLoop <= 0; docLoop ++ )
 	/* holds the stemming result of afile.txt. */					
 	/* pre-condition : tokenSize is correctly updated*/					
 					
-				
+	arrayToListNode( stemByPorter, tokenSize );				
 					
 					
 					/* - - - - - - - - - - - - - - - */
