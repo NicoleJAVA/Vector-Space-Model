@@ -40,7 +40,7 @@ using namespace std;
 
 
 
-int compare_term( const char *inputStr1, const char *inputStr2  )
+int compare_term( const char *inputStr1, const char *inputStr2, int index  )
 {
    int i = 0; 
    int flag = 1 ;
@@ -59,9 +59,11 @@ int compare_term( const char *inputStr1, const char *inputStr2  )
 	
 	
 	
-	/**************************************************** M A G I C ***
+	/**************************************************** M A G I C ***/
+if(index < 5 ){ 
 	printf("\nHello compare_term >> term1 is >> %s.", term1 );
 	printf("\nHello compare_term >> term2 is >> %s.", term2 );
+} 
 	/*******************************************************/
 
 	
@@ -145,7 +147,7 @@ int main3()
 	//printf("\n字串的長度到底是多少呢 : %d.", strlen( strA.c_str() ) ); 
 	//printf("\n字串的長度到底是多少呢 : %d.", strlen( strC.c_str() ) ); 
 	//cmpResultAB = compare_term( strA.c_str(), strB.c_str() );	
-	cmpResultCD = compare_term( strC.c_str(), strD.c_str() );
+	cmpResultCD = compare_term( strC.c_str(), strD.c_str(), 0 );
 	//cmpResultEF = compare_term( strE.c_str(), strF.c_str() );	
 	
 	//printf("\n\nA 與 B 的cmpResult 的結果是 : %d.", cmpResultAB ); 

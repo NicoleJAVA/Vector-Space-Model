@@ -1,4 +1,18 @@
 
+
+/******************		Ver. 26  -  rmvStop.cpp		*********************
+
+1.)	
+
+In txtToArray( )
+
+must return the result 'twoDimArr[][]',
+
+or must pass by address of the argument 'twoDimArr[][] ! 
+
+************************************************************/
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
@@ -29,7 +43,9 @@ void clear_array( char inputArr[ ][ MAX_STR_LEN ] ){
 			inputArr[i][j] = '\0';
 		} // End 2-for
 	} // End-1-for
-}
+}		//		End - clear_array( )  
+
+
 
 /******************************************************************************/
 
@@ -59,13 +75,20 @@ void txtToArray( FILE *txtFile, char twoDimArr[][ MAX_STR_LEN ], int & wordCount
          oneDimArr[ i ] = ' ';
       }
       i++;
+      //wordCount ++;
+      //printf(" wordCount is %d.", wordCount );
     } while ( tempCharacter_tTA != EOF);
     oneDimArr[ i ] = tempCharacter_tTA;
 	/*--------------------------------------------*/
 	}	
 	
+	
+	wordCount = 0;
 	tokenPtr_tTA = strtok( oneDimArr, " ,.-" );
+	
+	
 	while( tokenPtr_tTA != NULL  ){
+		//printf(" wordCount is %d.", wordCount );
 		strncpy( &temp_tTA[ 0 ], tokenPtr_tTA, MAX_STR_LEN );
 		strncpy( twoDimArr[ twoDim_i ], temp_tTA, MAX_STR_LEN ); 
 		i++;
@@ -74,6 +97,10 @@ void txtToArray( FILE *txtFile, char twoDimArr[][ MAX_STR_LEN ], int & wordCount
 		wordCount ++;
 	}
    fclose(txtFile);
+   
+   printf("\n\ntwoDimArr is %s\n\n", twoDimArr[23] ); 
+   
+   
 } /* End txtToArray( ) */
 
 /******************************************************************************/
@@ -94,9 +121,9 @@ void txtToArray( FILE *txtFile, char twoDimArr[][ MAX_STR_LEN ], int & wordCount
 	int flag = APPEND;
    char * tokenPtr;  
 	char temp[ MAX_STR_LEN ];
-	char token[ 10000 ][ MAX_STR_LEN ];
+
 /* ~ ~ ~ ~ ~ ~ */ 
-int rmvStop( char rmvStop[][ MAX_STR_LEN ], char stopList[][ MAX_STR_LEN ], int & stopNum, int & tokenSize )
+int rmvStop( char rmvStop[][ MAX_STR_LEN ], char stopList[][ MAX_STR_LEN ], int & stopNum, int & tokenSize, char token[ 10000 ][ MAX_STR_LEN ] )
 {
 
    tokenSize = 0; /* tokenSize must be reset to zero ! */
@@ -110,18 +137,16 @@ int rmvStop( char rmvStop[][ MAX_STR_LEN ], char stopList[][ MAX_STR_LEN ], int 
 	tokenCount = 0;
 	temp_i = 0;
 	flag = APPEND;
-	pFile=fopen ("input.txt","r");
+	// Ver. 26 Discard : pFile=fopen ("input.txt","r");
 	
-  if (pFile==NULL) perror ("\nIn rmvStop( ) : Error opening file");
-  else{
+  // Ver. 26 Discard : if (pFile==NULL) perror ("\nIn rmvStop( ) : Error opening file");
+  // Ver. 26 Discard : else{
 		
-		clear_array( token );
-		
-		txtToArray( pFile, token, tokenSize );
+		// Ver. 26 Discard : clear_array( token );
+		// Ver. 26 Discard : txtToArray( pFile, token, tokenSize );
+		// Ver. 26 Discard : fclose (pFile);
 
-		fclose (pFile);
 
-	printf("\nIn rmvStop( ) : After txtToArray( ) tokenSize is : %d .", tokenSize );
 	/*-------------------------------------------------------------*/	
 	for ( token_i = 0; token_i < tokenSize; token_i++ ){
 		flag = APPEND;
@@ -138,7 +163,7 @@ int rmvStop( char rmvStop[][ MAX_STR_LEN ], char stopList[][ MAX_STR_LEN ], int 
 	} // END for
 
 	rmvStop[ rmv_i ][0] = '\0';
-  } // END fopen( );
+  // Ver. 26 Discard : } // END fopen( );
   return 0;
 }
 

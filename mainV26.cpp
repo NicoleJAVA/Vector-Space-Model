@@ -1,8 +1,7 @@
 
-/******************		Ver. 25  -  main.cpp		*********************
+/******************		Ver. 26  -  main.cpp		*********************
 
-1.)	Nicole does N O T  want to write that sort-list-node STUFF ANYMORE !
-
+1.)	
 
 ************************************************************/
 
@@ -17,6 +16,7 @@
 #include "dictCpp.cpp"
 #include "sort_firstDict.cpp"
 #include "ir.hpp"
+#include "doctxtname.cpp"
 
 
 #define MAX_STR_LEN 30
@@ -36,8 +36,8 @@ int main()
 {
 	FILE * stopFile;
 	FILE * beforeStemFile;//After rmvstop( ), write article[] to beforStemFile
-	FILE * stemFile; // stemFile is only for reading. 
-	FILE * stemmingResultFile;//porter( ) writes reult into stemmingResultFile
+	FILE * stemFile;//  R E A D - O N L Y ! stemFile's only for reading
+	FILE * stemmingResultFile;//porter( ) writes result into stemmingResultFile
 
 	FILE * newsFile;
 	FILE * vectorFile;
@@ -52,15 +52,20 @@ int main()
    char article[ 10000 ][ MAX_STR_LEN ];
    char check[ 10000 ][ MAX_STR_LEN ];
    char stemByPorter[ 10000 ][ MAX_STR_LEN ];
-   // PPS. Don't name the array as "porter" because it would be confused 
-   // with "poter.cpp" and "poter( );"  
+   	// PPS. Don't name the array as "porter" because it would be confused 
+   	// with "poter.cpp" and "poter( );"  
    char dict[ DICT_SIZE ][ MAX_STR_LEN ];
+   char NEWSbeforeRmvStop[ 10000 ][ MAX_STR_LEN ]; 
+   	// Before rmvStop( ), run the following :
+   	// Within every loop==docloop, NEWSbeforeRmvStop will be cleared
+   	// and then be passed to txtToArray(fileTitle, $this, token# )
 
 
    int stopSize = 0;
-   int tokenSize = 0;
+   int stopTokenSize = 0;
    int stemSize = 0;
    int currDictSize = 0;
+   int NEWStokenSize = -1;
    int i = 0;
    int docloop = 1;	// docloop ranges form [ 1 ---> 1095 ]
 
@@ -72,41 +77,102 @@ int main()
 						
 	stopFile=fopen( "stopwordfile.txt", "r" );
 
-   txtToArray( stopFile, stopArr, stopSize );    
+	printf("\nStopFile's opened. Now txtToArray(stopfile)." );
+   txtToArray( stopFile, stopArr, stopSize );   
+		// txtToArray updates stopSize 
 	clear_array( article );
-   rmvStop( article, stopArr, stopSize, tokenSize  );
-	// After rmvStop(), rmvStop() first resets tokenSize to zero 
-	//and then updates tokenSize
+   // Ver. 26 Discard : rmvStop( article, stopArr, stopSize, stopTokenSize,   );
+	// After rmvStop(), rmvStop() first resets stopTokenSize to zero 
+	//and then updates stopTokenSize
+	
+	
+   puts("\n\n");	
+	
 
-						/*********************************/
-						/****   loop every "xxx.txt"  ****/
-						/********************************/
-for( docloop = 1; docloop <= MAX_DOC_LOOP; docloop++ ){	//	start-0-for
-	beforeStemFile = fopen( "afile.txt" , "w" );
-   if ( beforeStemFile==NULL ) perror ( "\n In main() : File Cannot Be Opened.\n" ); /*2-if-else*/
+/********************************************************* M A G I C ****/
+
+
+	beforeStemFile = fopen( "2.txt" , "r" );
+	// old >> aFile = fopen( "afile.txt" , "w" );
+	txtToArray( beforeStemFile, NEWSbeforeRmvStop, NEWStokenSize ); 
+		// txtToArray updates NEWStokenSize
+	printf("\nHello main >> NEWStokenSize is %d.", NEWStokenSize );
+	printf("\nHello main >> beforeStemFile[2] is %s.", beforeStemFile[2] );
+	clear_array( article );
+	rmvStop( article, stopArr, stopSize, NEWStokenSize, NEWSbeforeRmvStop );
+
+	puts("\nEnd M A G I C \n\n");
+
+	
+/********************************************************** M A G I C ******/
+
+
+
+
+
+
+
+
+
+
+
+
+						/**************************************/
+						/****   loop every "docloop.txt"  *****/
+						/**************************************/
+						
+for( docloop = 1; docloop <= 0; docloop++ ){	//	Start-0-for-loop
+
+	printf("\n\nNow it's in %d-th doloop.\n", docloop ); 
+	newsSourceTitle = create_txtTitle( docloop, 1 );
+	stemResultTitle = create_txtTitle( docloop, 0 );
+	puts( newsSourceTitle.c_str() );
+	puts( stemResultTitle.c_str() );
+	
+
+	
+
+	beforeStemFile = fopen( newsSourceTitle.c_str() , "w" );
+	// old >> aFile = fopen( "afile.txt" , "w" );
+
+	txtToArray( beforeStemFile, NEWSbeforeRmvStop, NEWStokenSize ); 
+	printf("\nHello main >> beforeStemFile[2] is %s.", beforeStemFile[2] );
+	clear_array( article );
+	rmvStop( article, stopArr, stopSize, NEWStokenSize, NEWSbeforeRmvStop );
+
+   if ( beforeStemFile==NULL ) perror ( "\n In main() : File Cannot Be Opened.\n" ); 
+   
    else //	2-if-else
    {		   
 		
 		clear_array( stemByPorter );
+		i = 0;
 		
-		// while-loop to write the stuff in Winto aFile >>
-		// before enter while-loop, tokenSize has already been updated by rmvStop()
-		while( i <= tokenSize ){ 
-						/*********************************/
-						/****   write to  beforeStemFile  ****/
-						/********************************/
+		//---while-loop to write the stuff in Winto aFile >>
+		//---BeforeEnter while-loop,tokenSize's alreadyBeenUpdated by rmvStop()
+		while( i <= stopTokenSize ){ 
+						/**************************************/
+						/****   write to  beforeStemFile  *****/
+						/**************************************/
+
 			fprintf( beforeStemFile, "%s ", article[ i ] );
+			// old >> fprintf( aFile, "%s ", article[ i ] );
 	 	  i++;  
-		} 							/* End 3-while */
+		} 							//		End-3-while
 		fclose( beforeStemFile );
 
 		/*--------------------------------------------------------*/
-		stemFile = fopen( "afile.txt" ,"r");
+		stemFile = fopen( newsSourceTitle.c_str() ,"r");
+		stemmingResultFile = fopen( stemResultTitle.c_str(), "w" );
+		// old >> stemFile = fopen( "afile.txt" ,"r");
+		
 		rewind(stemFile);
-  		porter( 1, stemByPorter, tokenSize, stemFile, stemmingResultFile );
-  		fclose(stemFile);
+  		porter( 1, stemByPorter, stopTokenSize, stemFile, stemmingResultFile );
   		
-		printf("After porter(), tokenSize is %d\n", tokenSize );
+  		fclose(stemFile);
+  		fclose(stemmingResultFile);
+  		
+		printf("\nHello main >> After porter(), tokenSize is %d\n", stopTokenSize );
 
 					
 					
@@ -114,9 +180,11 @@ for( docloop = 1; docloop <= MAX_DOC_LOOP; docloop++ ){	//	start-0-for
 
 
  		/*--------------------------------------------------------*/ 
-   }  							/* END 2-if-else */
+ 		puts("\n-------  \n");	
+   }  							//		End-2-if-else
+   
   
-}	//		end-0-for-loop
+}	//		End-0-for-loop
  
  
 

@@ -376,7 +376,7 @@ static void stemfile(FILE * f, char porter[][ MAX_STR_LEN ], int & stemSize )
    }
 }
 
-int porter( int argc, char porterArr[ ][ MAX_STR_LEN ], int &stemSize, FILE * f  )
+int porter( int argc, char porterArr[ ][ MAX_STR_LEN ], int &stemSize, FILE * f,FILE * resultFile   )
 {  
 	printf("\nIn porter( ) :Enter porter. And we have stemSize : %d\n", stemSize );
 	int i;
@@ -389,7 +389,7 @@ int porter( int argc, char porterArr[ ][ MAX_STR_LEN ], int &stemSize, FILE * f 
    //{  FILE * f = fopen(argv[i],"r");
    {  
 		/* Discard this line in ver. 7 : f = fopen( "afile.txt" ,"r");*/
-   	FILE * resultFile = fopen( "result.txt", "w" );
+      // Discard this line in ver. 25 : resultFile = fopen( "result.txt", "w" );
       if (f == 0) { printf("Error\n"); exit(1); }
       if ( f ==NULL ) perror ( "File Cannot Be Opened.\n" );
       else
