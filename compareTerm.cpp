@@ -1,25 +1,19 @@
 
-/* Ver. 16-	compareTerm.cpp
+/* Ver. 17	-	compareTerm.cpp
 
 1.)
-Don't use the official strncmp/strcmp anymore.
-Why not write a compare_term( ) function yourself? 
-別用官方的 strncmp，何不乾脆自己寫一個 compare_term( ) ? 
+Don't use MAX_STR_LEN 30 to allocate term1[ MAX_STR_LEN ]
+Instead, just declare term1[ 200 ]
 
 2.)
-[結果]
-strlen(s1) = 5
-strlen(s2) = 5
-[說明]
-strlen():回傳字串的長度("不"包括terminated null character)
+Discard comments.
 
 3.)
-   int flag_same_string = 2; 
-	// 注意 ! 不是指整個字串都一樣, 而是指目前有比較到的字串都一樣 
-	//*先假設他們是完全一樣的字串 
- 
+Wrong Code :
+	#define CMP_LEN 100
+Correct Code :
+	#define CMP_LEN 1000
  */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
@@ -37,7 +31,14 @@ strlen():回傳字串的長度("不"包括terminated null character)
 #define STRA_NEXT_B 1 /* 定義為 1 是因為認為 A 先於  B 較為直覺直觀, 所以定義為 TRME 值*/
 #define STRA_AFTER_B 0  /* term1 shold appear after term2 */
 #define SAME 2
+
+#define CMP_LEN 1000
 using namespace std;
+
+
+
+
+
 
 int compare_term( const char *inputStr1, const char *inputStr2  )
 {
@@ -48,13 +49,13 @@ int compare_term( const char *inputStr1, const char *inputStr2  )
 	/* 先假設他們是完全一樣的字串 */
    int flag_same_next_ch = 2; /* 先假設他們的下一個字元也是同樣的*/
 
-	char term1[ MAX_STR_LEN ];
-	char term2[ MAX_STR_LEN ];
+	char term1[ CMP_LEN ];
+	char term2[ CMP_LEN ];
   	char tempchar1;
 	char tempchar2;
 	
-	strncpy( term1, inputStr1, MAX_STR_LEN );
-	strncpy( term2, inputStr2, MAX_STR_LEN );
+	strncpy( term1, inputStr1, CMP_LEN );
+	strncpy( term2, inputStr2, CMP_LEN );
 	
 	printf("\nHello compare_term >> term1 is >> %s.", term1 );
 	printf("\nHello compare_term >> term2 is >> %s.", term2 );
@@ -68,7 +69,7 @@ int compare_term( const char *inputStr1, const char *inputStr2  )
 			if(flag_same_string == 2)
 			{
 				flag = 0;
-				printf("\n從現在開始,flag 變成 0 了 " ); 
+				//printf("\n從現在開始,flag 變成 0 了 " ); 
 			}
 			flag_same_string = -1;
 		}				// end if
@@ -79,14 +80,14 @@ int compare_term( const char *inputStr1, const char *inputStr2  )
 		}				// end if		
 		
 		if( term1[i] == term2[i] ){
-			printf("\n兩字元相同" ); 
+			//printf("\n兩字元相同" ); 
 		}
 		
-		printf("\n目前 flag是 %d. ", flag );
-		printf("\n目前 flag_same_string 是 %d. ", flag_same_string ); 
+		//printf("\n目前 flag是 %d. ", flag );
+		//printf("\n目前 flag_same_string 是 %d. ", flag_same_string ); 
 		if( term1[ i+1 ] != term2[ i+1 ] ){
 			if( flag_same_string == 2 ){
-				printf("\n注意 -----> 從下一個字元開始, 兩字串開始不一樣了" ); 
+				//printf("\n注意 -----> 從下一個字元開始, 兩字串開始不一樣了" ); 
 			}
 		}
 		tempchar1 = term1[i];
@@ -100,7 +101,7 @@ int compare_term( const char *inputStr1, const char *inputStr2  )
 			flag_same_string = -1;
 			if( flag_same_string == 2 ){
 				flag = 1;
-				printf("\n\nterm2 比 term1 長. flag 為 %d", flag );
+				//printf("\n\nterm2 比 term1 長. flag 為 %d", flag );
 			}
 			
 		}
@@ -109,7 +110,7 @@ int compare_term( const char *inputStr1, const char *inputStr2  )
 			flag_same_next_ch = -1;
 			if( flag_same_string == 2 ){
 				
-				printf("\nterm1 比 term2 長."); 
+				//printf("\nterm1 比 term2 長."); 
 			}				/* end if */
 		}
 		
@@ -141,7 +142,7 @@ int main(){
 
 }
 */
-int main()
+int main3()
 {
 	int cmpResultAB; /* compare result of compare_term( ) */
 	int cmpResultCD; /* compare result of compare_term( ) */
@@ -153,16 +154,19 @@ int main()
 	std::string strE = "abzsssss";
 	std::string strF = "abzss";	
 	
-	printf("\n字串的長度到底是多少呢 : %d.", strlen( strA.c_str() ) ); 
-	printf("\n字串的長度到底是多少呢 : %d.", strlen( strC.c_str() ) ); 
+	//printf("\n字串的長度到底是多少呢 : %d.", strlen( strA.c_str() ) ); 
+	//printf("\n字串的長度到底是多少呢 : %d.", strlen( strC.c_str() ) ); 
 	//cmpResultAB = compare_term( strA.c_str(), strB.c_str() );	
 	cmpResultCD = compare_term( strC.c_str(), strD.c_str() );
 	//cmpResultEF = compare_term( strE.c_str(), strF.c_str() );	
 	
 	//printf("\n\nA 與 B 的cmpResult 的結果是 : %d.", cmpResultAB ); 
-	printf("\n\nC 與 D 的cmpResult 的結果是 : %d.", cmpResultCD ); 
+	//printf("\n\nC 與 D 的cmpResult 的結果是 : %d.", cmpResultCD ); 
 	//printf("\n\nE 與 F 的cmpResult 的結果是 : %d.", cmpResultEF ); 
 	
-	printf("\n\n\n");
+	char tempbuf[ 30 ];
+	strncpy( tempbuf, strA.c_str(), 100 );
+	//printf("\n strA is %s.", tempbuf );
+	//printf("\n\n\n");
 	system("PAUSE");
 }

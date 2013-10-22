@@ -6,8 +6,6 @@ And only use insertNode( ) to handle the node insertion
 Niole >> 我想整個 刪掉 duplicate_currDict( )  這個函數，假裝它從未存在 
 	
 */
-
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
@@ -28,6 +26,11 @@ Niole >> 我想整個 刪掉 duplicate_currDict( )  這個函數，假裝它從未存在
 #define DOC_NUM 1095
 #endif
 #define DICT_SIZE 1000/* dictionary size : total number of tokens of all docs.*/
+using namespace std;
+
+
+
+/***********************************************************/
 using namespace std;
 /*((((((((((((((((((((((((((((((((((((((((((((((((*/
 /*((((((((((((((((((((((((((((((((((((((((((((((((*/
@@ -61,7 +64,7 @@ void clear_array( char inputArr[ ][ MAX_STR_LEN ] ){
 /* ~ ~ ~ ~ ~ ~ ~ ~ */
 void txtToArray( FILE *txtFile, char twoDimArr[][ MAX_STR_LEN ], int & wordCount )
 {
-	printf("\nEnter txtToArray" );
+
 	/* wordCout must be reset to zero ! */ 
 	wordCount = 0; 
    twoDim_i = 0;
@@ -116,7 +119,7 @@ void txtToArray( FILE *txtFile, char twoDimArr[][ MAX_STR_LEN ], int & wordCount
 /* ~ ~ ~ ~ ~ ~ */ 
 int rmvStop( char rmvStop[][ MAX_STR_LEN ], char stopList[][ MAX_STR_LEN ], int & stopNum, int & tokenSize )
 {
-   printf("\nEnter rvmStop( ) ; " );
+
    tokenSize = 0; /* tokenSize must be reset to zero ! */
    i = 0;
    n = 0;
@@ -138,7 +141,7 @@ int rmvStop( char rmvStop[][ MAX_STR_LEN ], char stopList[][ MAX_STR_LEN ], int 
 		txtToArray( pFile, token, tokenSize );
 
 		fclose (pFile);
-	printf("\nIn rmvStop( ) : stopNum is : %d .", stopNum );
+
 	printf("\nIn rmvStop( ) : After txtToArray( ) tokenSize is : %d .", tokenSize );
 	/*-------------------------------------------------------------*/	
 	for ( token_i = 0; token_i < tokenSize; token_i++ ){
@@ -264,6 +267,7 @@ int main()
 	/* Ver. 14 開始, deprecate 這行 : arrayToListNode( stemByPorter, tokenSize, dictNode ); */ 
 	/* Ver. 14 開始, deprecate 這行 : arrayToDict( stemByPorter, tokenSize, dictNode ); */
 	for( i = 0; i < tokenSize; i++ ){
+		printf("先看看作業 1 的 stemByPorter[i] 是 %s.", stemByPorter[i] ); 
 		insertNode( dictNode, stemByPorter[ i ] );
 	}					/* end for */	
 

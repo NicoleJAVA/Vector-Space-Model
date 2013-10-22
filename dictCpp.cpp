@@ -21,12 +21,9 @@ Niole >> 我想整個 刪掉 duplicate_currDict( )  這個函數，假裝它從未存在
 #define MAX_WORD_NUM 10000
 #define DOC_NUM 1095
 #define DICT_SIZE 1000/* dictionary size : total number of tokens of all docs.*/
-
 #define EARLIER 0
 #define LATER 1 
 #define SAME 2
-using namespace std;
-
 
 #ifndef _IR_HPP_
 #define _IR_HPP_
@@ -36,6 +33,13 @@ struct ListNode
 	struct ListNode  *nextPtr ;
 };
 #endif
+
+
+
+using namespace std;
+
+/*********************************************/
+
 /* - - - - - - - - - - - - - - - */
 	ListNode *newTermsNode;
 	ListNode *currDictNode;  /* is first updated by duplicate_currDict( ) */

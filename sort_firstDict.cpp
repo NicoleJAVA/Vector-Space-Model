@@ -1,22 +1,24 @@
 /*
-Ver. 14
+Ver. 16
 
 1.)
-
+Nicloe starts to call compare_term( ) !!!
 
 
 */
 
 /* Fig. 12.3: fig12_03.c
    Operating and maintaining a list */
+   
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
 #include <strings.h>
 #include <unistd.h>
 #include <ctype.h>
+#include "compareTerm.cpp"
 #define MAX_STR_LEN 30
-
+#define SORT_LEN 1000
 using namespace std;
 /* self-referential structure */
 #ifndef _IR_HPP_
@@ -29,6 +31,11 @@ struct ListNode {
 
 //typedef struct listNode ListNode; /* synonym for struct listNode */
 typedef ListNode *ListNodePtr; /* synonym for ListNode* */
+
+
+
+
+
 
 /* prototypes */
 void insertNode( ListNodePtr &sPtr, std::string value );
@@ -44,18 +51,19 @@ void instructions( void );
 /* Insert a new value into the list in sorted order */
 void insertNode( ListNodePtr &sPtr, std::string value )
 { 
-	printf("\n\n嗨	嗨	嗨	嗨	嗨	嗨	" ); 
+	char chbuf[ 1000 ];
+	strncpy( chbuf, value.c_str(), 1000 );
+	printf("\n\n嗨	嗨	嗨	嗨	嗨	嗨	sPtr is %s.", chbuf ); 
 	
    ListNodePtr newPtr;      /* pointer to new node */
    ListNodePtr previousPtr; /* pointer to previous node in list */
    ListNodePtr currentPtr;  /* pointer to current node in list */
    int termOrder = 0;
    int currDataSize ;
-	char buf1[ MAX_STR_LEN ];
-	char buf2[ MAX_STR_LEN ];
+	char buf1[ SORT_LEN ];
+	char buf2[ SORT_LEN ];
    // original code : newPtr = (ListNode *) malloc( sizeof( ListNode ) ); /* create node */
 	newPtr = new ListNode; /* new will return the address */
-	printf("\n new 回傳一個位址給了 newPtr" ); 
 	
 	/*									->		if newPtr is space available */
    if ( newPtr != NULL ) { 
@@ -79,14 +87,12 @@ void insertNode( ListNodePtr &sPtr, std::string value )
 			printf("\n現在 currentPtr  不是 NULL "); 
 		}      
 		 
-		value[ sizeof(value) - 1 ]  = '\0';	
-		printf("\n已設定 value[ end ] 為 null terminated"); 
-		
+	
 		if( currentPtr != NULL ){
 			printf("\npreviousPtr 不是 NULL 呢" ); 
-			//strncpy( buf1, value.c_str(), MAX_STR_LEN );
-			//strncpy( buf2, currentPtr->data.c_str(), MAX_STR_LEN );
-			termOrder = strncmp( value.c_str(), currentPtr->data.c_str(), value.size());
+			strncpy( buf1, value.c_str(), SORT_LEN );
+			strncpy( buf2, currentPtr->data.c_str(), SORT_LEN );
+			termOrder = compare_term( sPtr->data.c_str(), value.c_str() );
 			printf("\n完成了字串比對. termOrder 是  %d", termOrder); 
 		}
 	
@@ -104,7 +110,7 @@ void insertNode( ListNodePtr &sPtr, std::string value )
 		
       /* insert new node at beginning of list */
       if ( previousPtr == NULL ) {
-			printf("\nS P E C I A L   C A S E : first listNode to be inserted." ); 
+			//printf("\nS P E C I A L   C A S E : first listNode to be inserted." ); 
 			printf("\npreviousPtr 是 NULL 所以是第一個唷" ); 
          newPtr->nextPtr = sPtr;
          sPtr = newPtr;
@@ -128,15 +134,25 @@ void insertNode( ListNodePtr &sPtr, std::string value )
 
 int main2( void )
 { 
-   ListNodePtr startPtr = NULL; /* initially there are no nodes */
+   ListNodePtr startPtr = NULL; //* initially there are no nodes */
    int choice; /* user's choice */
-   char item[ MAX_STR_LEN ];  /* char entered by user */
+   char item[ MAX_STR_LEN ];  //* char entered by user */
 
-   instructions(); /* display the menu */
+	
+   
+
+
+
+
+
+
+	/***********************************
+
+   instructions(); //* display the menu 
    printf( "? " );
    scanf( "%d", &choice );
 
-   /* loop while user does not choose 3 */
+   //* loop while user does not choose 3 
    while ( choice != 3 ) { 
 
       switch ( choice ) { 
@@ -144,30 +160,30 @@ int main2( void )
          case 1:
             printf( "Enter a character: " );
             scanf( "\n%s", &item );
-            insertNode( startPtr, item ); /* insert item in list */
-            // original code : printList( startPtr );
+            insertNode( startPtr, item ); 
+            
             break;
 
          case 2:
 
-            /* if list is not empty */
+            //* if list is not empty 
             if ( !isEmpty( startPtr ) ) { 
                printf( "Enter character to be deleted: " );
                scanf( "\n%c", &item );
 
-               /* if character is found, remove it */
-               if ( deleteNode( &startPtr, item ) ) { /* remove item */
+               //* if character is found, remove it 
+               if ( deleteNode( &startPtr, item ) ) { //* remove item 
                   printf( "%c deleted.\n", item );
                   printList( startPtr );
-               } /* end if */
+               } //* end if 
                else {
                   printf( "%c not found.\n\n", item );
-               } /* end else */
+               } //* end else 
 
-            } /* end if */
+            } //* end if 
             else {
                printf( "List is empty.\n\n" );
-            } /* end else */
+            } //* end else 
 
             break;
 
@@ -176,17 +192,18 @@ int main2( void )
             instructions();
             break;
       
-      } /* end switch */
+      } //* end switch 
 
       printf( "? " );
       scanf( "%d", &choice );
-   } /* end while */
+   } //* end while 
+   /*************************************************/
 
    printf( "End of run.\n" );
-   
-   return 0; /* indicates successful termination */
+   system("PAUSE");
+   return 0; //* indicates successful termination 
 
-} /* end main */
+} //* end main 
 
 
 
