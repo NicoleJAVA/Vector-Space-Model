@@ -1,30 +1,9 @@
 
-
-
-		//			In Github local repository !
-
-
-
-
-
 /******************		Ver. 25  -  main.cpp		*********************
 
 1.)	Nicole does N O T  want to write that sort-list-node STUFF ANYMORE !
 
-2.) 	Must set i = 0 every docloop, otherwise while-loop will logic-err.
 
-Wrong code : 
-	
-		// forget to set : i = 0;
-		while( i <= tokenSize ){ 
-			...
-			
-Correct code : 
-	
-		i = 0;
-		while( i <= tokenSize ){ 
-			...			
-			
 ************************************************************/
 
 #include <stdio.h>
@@ -38,7 +17,6 @@ Correct code :
 #include "dictCpp.cpp"
 #include "sort_firstDict.cpp"
 #include "ir.hpp"
-#include "doctxtname.cpp"
 
 
 #define MAX_STR_LEN 30
@@ -58,8 +36,8 @@ int main()
 {
 	FILE * stopFile;
 	FILE * beforeStemFile;//After rmvstop( ), write article[] to beforStemFile
-	FILE * stemFile;//  R E A D - O N L Y ! stemFile's only for reading
-	FILE * stemmingResultFile;//porter( ) writes result into stemmingResultFile
+	FILE * stemFile; // stemFile is only for reading. 
+	FILE * stemmingResultFile;//porter( ) writes reult into stemmingResultFile
 
 	FILE * newsFile;
 	FILE * vectorFile;
@@ -94,44 +72,32 @@ int main()
 						
 	stopFile=fopen( "stopwordfile.txt", "r" );
 
-	printf("\nStopFile's opened. Now txtToArray(stopfile)." );
    txtToArray( stopFile, stopArr, stopSize );    
 	clear_array( article );
    rmvStop( article, stopArr, stopSize, tokenSize  );
-   puts("\n\n");
 	// After rmvStop(), rmvStop() first resets tokenSize to zero 
 	//and then updates tokenSize
 
-						/**************************************/
-						/****   loop every "docloop.txt"  *****/
-						/**************************************/
-						
-for( docloop = 1; docloop <= MAX_DOC_LOOP; docloop++ ){	//	Start-0-for-loop
-
-	printf("\n\nNow it's in %d-th doloop.\n", docloop ); 
-	newsSourceTitle = create_txtTitle( docloop );
-	puts( newsSourceTitle.c_str() );
-
-	
+						/*********************************/
+						/****   loop every "xxx.txt"  ****/
+						/********************************/
+for( docloop = 1; docloop <= MAX_DOC_LOOP; docloop++ ){	//	start-0-for
 	beforeStemFile = fopen( "afile.txt" , "w" );
-	
-   if ( beforeStemFile==NULL ) perror ( "\n In main() : File Cannot Be Opened.\n" ); 
-   
+   if ( beforeStemFile==NULL ) perror ( "\n In main() : File Cannot Be Opened.\n" ); /*2-if-else*/
    else //	2-if-else
    {		   
 		
 		clear_array( stemByPorter );
-		i = 0;
 		
-		//---while-loop to write the stuff in Winto aFile >>
-		//---BeforeEnter while-loop,tokenSize's alreadyBeenUpdated by rmvStop()
+		// while-loop to write the stuff in Winto aFile >>
+		// before enter while-loop, tokenSize has already been updated by rmvStop()
 		while( i <= tokenSize ){ 
-						/**************************************/
-						/****   write to  beforeStemFile  *****/
-						/**************************************/
+						/*********************************/
+						/****   write to  beforeStemFile  ****/
+						/********************************/
 			fprintf( beforeStemFile, "%s ", article[ i ] );
 	 	  i++;  
-		} 							//		End-3-while
+		} 							/* End 3-while */
 		fclose( beforeStemFile );
 
 		/*--------------------------------------------------------*/
@@ -140,7 +106,7 @@ for( docloop = 1; docloop <= MAX_DOC_LOOP; docloop++ ){	//	Start-0-for-loop
   		porter( 1, stemByPorter, tokenSize, stemFile, stemmingResultFile );
   		fclose(stemFile);
   		
-		printf("\nHello main >> After porter(), tokenSize is %d\n", tokenSize );
+		printf("After porter(), tokenSize is %d\n", tokenSize );
 
 					
 					
@@ -148,11 +114,9 @@ for( docloop = 1; docloop <= MAX_DOC_LOOP; docloop++ ){	//	Start-0-for-loop
 
 
  		/*--------------------------------------------------------*/ 
- 		puts("\n-------  \n");	
-   }  							//		End-2-if-else
-   
+   }  							/* END 2-if-else */
   
-}	//		End-0-for-loop
+}	//		end-0-for-loop
  
  
 

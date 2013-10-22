@@ -1,30 +1,9 @@
 
-
-
-		//			In Github local repository !
-
-
-
-
-
 /******************		Ver. 25  -  main.cpp		*********************
 
 1.)	Nicole does N O T  want to write that sort-list-node STUFF ANYMORE !
 
-2.) 	Must set i = 0 every docloop, otherwise while-loop will logic-err.
 
-Wrong code : 
-	
-		// forget to set : i = 0;
-		while( i <= tokenSize ){ 
-			...
-			
-Correct code : 
-	
-		i = 0;
-		while( i <= tokenSize ){ 
-			...			
-			
 ************************************************************/
 
 #include <stdio.h>
@@ -94,11 +73,9 @@ int main()
 						
 	stopFile=fopen( "stopwordfile.txt", "r" );
 
-	printf("\nStopFile's opened. Now txtToArray(stopfile)." );
    txtToArray( stopFile, stopArr, stopSize );    
 	clear_array( article );
    rmvStop( article, stopArr, stopSize, tokenSize  );
-   puts("\n\n");
 	// After rmvStop(), rmvStop() first resets tokenSize to zero 
 	//and then updates tokenSize
 
@@ -108,11 +85,9 @@ int main()
 						
 for( docloop = 1; docloop <= MAX_DOC_LOOP; docloop++ ){	//	Start-0-for-loop
 
-	printf("\n\nNow it's in %d-th doloop.\n", docloop ); 
-	newsSourceTitle = create_txtTitle( docloop );
-	puts( newsSourceTitle.c_str() );
+	create_txtTitle( docloop );
 
-	
+
 	beforeStemFile = fopen( "afile.txt" , "w" );
 	
    if ( beforeStemFile==NULL ) perror ( "\n In main() : File Cannot Be Opened.\n" ); 
@@ -121,7 +96,6 @@ for( docloop = 1; docloop <= MAX_DOC_LOOP; docloop++ ){	//	Start-0-for-loop
    {		   
 		
 		clear_array( stemByPorter );
-		i = 0;
 		
 		//---while-loop to write the stuff in Winto aFile >>
 		//---BeforeEnter while-loop,tokenSize's alreadyBeenUpdated by rmvStop()
@@ -140,7 +114,7 @@ for( docloop = 1; docloop <= MAX_DOC_LOOP; docloop++ ){	//	Start-0-for-loop
   		porter( 1, stemByPorter, tokenSize, stemFile, stemmingResultFile );
   		fclose(stemFile);
   		
-		printf("\nHello main >> After porter(), tokenSize is %d\n", tokenSize );
+		printf("After porter(), tokenSize is %d\n", tokenSize );
 
 					
 					
@@ -148,9 +122,8 @@ for( docloop = 1; docloop <= MAX_DOC_LOOP; docloop++ ){	//	Start-0-for-loop
 
 
  		/*--------------------------------------------------------*/ 
- 		puts("\n-------  \n");	
+ 		
    }  							//		End-2-if-else
-   
   
 }	//		End-0-for-loop
  
