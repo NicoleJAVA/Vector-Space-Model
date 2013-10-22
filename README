@@ -1,5 +1,70 @@
+	
+	Github\Vector-Space-Model\README
 
+	/************************************************************	
+		
+		README in Github local repository directory !
+		
+	************************************************************/
+
+
+	
+2013.10.22      >> Week     >>  day
+
+蟲 [ B U G ]
+[ Where ] : doctxtname.cpp >> Ver. 24 
+[ B U G ]  cannot pass objects of non-POD type 'struct std::string' through '...'
+[ Solution ] :
+Wrong Code : 
+	snprintf( titleBuf, TXT_NAME_LEN, "%d%s", 20, txtSuffixTitle );
+Correct Code :  
+	snprintf( titleBuf, TXT_NAME_LEN, "%d%s", 20, txtSuffixTitle.c_str() );
+
+
+
+
+---
+
+蟲 [ B U G ]: sort_firstDict.cpp 
+base operand of `->' has non-pointer type `std::string' 
+[ Solution ] 
+Wrong : value->data.c_str()
+Correct:value.c_str()
+( declaration is "  std::string value;  " )
+
+---
+
+蟲 [ B U G ]: in compareTerm.cpp :
+Only 3 character of std::string will be copied into term1 and term2.
+[ Solution ] :
+Wrong Code :
+	#define CMP_LEN 100
+Correct Code :
+	#define CMP_LEN 1000
+
+================================================================
 2013. 10. 21    >> Week 7   >> Monday
+
+
+蟲 [ B U G ]:
+currentPtr = *sPtr;    << SOMETHING WRONG !
+[ Solution ] :
+很酷唷, 這次改成是在實際引數反而是用 &。
+這次形式引數反而是用 * 唷。 
+實際引數 : insertNode( &dictNode, stemByPorter[ i ] ); /* 這是在 main() 內的實際呼叫 */
+形式引數 : void insertNode( ListNodePtr *sPtr, std::string value ){}
+補充說明 : typedef struct ListNode* ListNodePtr
+---
+
+蟲 [ B U G ] :
+[ Where ] : dictCpp.cpp ( about Ver. 11 )
+[ B U G ] : dictCpp.cpp : no matching function for call to `strncpy(std::string&, const char*, int)'  
+[ B U G ] : invalid conversion from `const char*' to `char*' 
+WRONG   CODE :
+	strncpy( tail->nextPtr->data, h2->data.c_str(), MAX_STR_LEN );
+CORRECT CODE :
+	strncpy( const_cast<char*>(tail->nextPtr->data.c_str()), h2->data.c_str(), MAX_STR_LEN );
+
 
 ---
 
@@ -49,6 +114,9 @@ So Nicole adds these lines of code :
 		if( previousPtr != NULL ){ /* If currentPtr->data is the first node, this node is empty, and strncmp() will crash becuse this is NULL */
 			termOrder = strncmp( value.c_str(), currentPtr->data.c_str(), value.size());
 		}
+		//printf("\nHello insert >>  termOrder = strcmp( ) " );
+		//printf("\nHello insert >>  termOder is : %d.", termOrder );
+      /* loop to find the correct location in the list */
       while ( currentPtr != NULL && termOrder > 0 && previousPtr != NULL ) { 
 
 IMPORTANT ! If currentPtr->data is the first node, this node is empty, and strncmp() will CRASH becuse this is NULL.
