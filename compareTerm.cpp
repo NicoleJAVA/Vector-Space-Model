@@ -57,13 +57,16 @@ int compare_term( const char *inputStr1, const char *inputStr2  )
 	strncpy( term1, inputStr1, CMP_LEN );
 	strncpy( term2, inputStr2, CMP_LEN );
 	
+	
+	
+	/**************************************************** M A G I C ***/
 	printf("\nHello compare_term >> term1 is >> %s.", term1 );
 	printf("\nHello compare_term >> term2 is >> %s.", term2 );
-	
+	/*******************************************************/
 
 	
    for( i = 0; term1[i] != '\0' && term2[i] != '\0' ; i++ ){
-		printf("\n\n\n¶i¤J %d °j°é\n", i ); 
+		
 		if( term1[i] > term2[i] ){
 			
 			if(flag_same_string == 2)
