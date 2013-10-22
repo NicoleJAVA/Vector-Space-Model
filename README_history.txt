@@ -1,118 +1,160 @@
-IR-HW2\README_history.txt
+2013.10.22      >> Week 7   >> Tuesday
+
+蟲 [ B U G ]: sort_firstDict.cpp 
+base operand of `->' has non-pointer type `std::string' 
+[ Solution ] 
+Wrong : value->data.c_str()
+Correct:value.c_str()
+( declaration is "  std::string value;  " )
+
+---
+
+蟲 [ B U G ]: in compareTerm.cpp :
+Only 3 character of std::string will be copied into term1 and term2.
+[ Solution ] :
+Wrong Code :
+	#define CMP_LEN 100
+Correct Code :
+	#define CMP_LEN 1000
+
+================================================================
+2013. 10. 21    >> Week 7   >> Monday
 
 
-/* Ver. 17	-	compareTerm.cpp
+蟲 [ B U G ]:
+currentPtr = *sPtr;    << SOMETHING WRONG !
+[ Solution ] :
+很酷唷, 這次改成是在實際引數反而是用 &。
+這次形式引數反而是用 * 唷。 
+實際引數 : insertNode( &dictNode, stemByPorter[ i ] ); /* 這是在 main() 內的實際呼叫 */
+形式引數 : void insertNode( ListNodePtr *sPtr, std::string value ){}
+補充說明 : typedef struct ListNode* ListNodePtr
+---
 
-1.)
-Don't use MAX_STR_LEN 30 to allocate term1[ MAX_STR_LEN ]
-Instead, just declare term1[ 200 ]
+蟲 [ B U G ] :
+[ Where ] : dictCpp.cpp ( about Ver. 11 )
+[ B U G ] : dictCpp.cpp : no matching function for call to `strncpy(std::string&, const char*, int)'  
+[ B U G ] : invalid conversion from `const char*' to `char*' 
+WRONG   CODE :
+	strncpy( tail->nextPtr->data, h2->data.c_str(), MAX_STR_LEN );
+CORRECT CODE :
+	strncpy( const_cast<char*>(tail->nextPtr->data.c_str()), h2->data.c_str(), MAX_STR_LEN );
 
-2.)
-Discard comments.
+
+---
+
+蟲 [ B U G ] :
+[ Where ] : sort_firstDict.cpp
+[ B U G ] : I printf each line. I found that strncmp( newPtr->data, value, MAX_STR_LEN ) will CRASH.
+[ Solution ] : 
+tutorial : http://stackoverflow.com/questions/1623769/is-there-any-safe-strcmp/1623778#1623778
+
+<<
+
+take a look, what the US DHS National Cyber Security Division recommends on this matter:
+Ensure that strings are null terminated before passing into strcmp. This can be enforced by always placing a \0 in the last allocated byte of the buffer.
+char str1[] ="something";
+char str2[] = "another thing";
+/* In this case we know strings are null terminated. Pretend we don't. */
+str1[sizeof(str1)-1] = '\0';
+str2[sizeof(str2)-1] = '\0';
+/* Now the following is safe. */
+if (strcmp(str1, str2)) { /* do something */ } else { /* do something 
+
+>>   // End tutorial
+
+HOWEVER, 
+array[ ] is more like a "C-stlye" thing.
+and many tutorials sugget that : Don't use array[]; instead, use std::string stringname 
+
+
+蟲[ B U G ]:
+no matching function for call to `strncmp(std::string&, char*&, int)'
+[ Solution ] :
+( PPS. from now on, I start my std::string life-style ! )
+Wrong code : 
+strcmp (word1, word2) 
+Corrct code : 
+x = strcmp(word1.c_str(), word2.c_str());
+
+---
+
+蟲 [ B U G ]: sort_firstDict_ver_string.cpp
+
+
+FINALLY, it's not because of the usage of strncmp( ) .
+It's because adding the first listNode is a SPECIAL CASE !!!!
+So Nicole adds these lines of code : 
+
+		if( previousPtr != NULL ){ /* If currentPtr->data is the first node, this node is empty, and strncmp() will crash becuse this is NULL */
+			termOrder = strncmp( value.c_str(), currentPtr->data.c_str(), value.size());
+		}
+		//printf("\nHello insert >>  termOrder = strcmp( ) " );
+		//printf("\nHello insert >>  termOder is : %d.", termOrder );
+      /* loop to find the correct location in the list */
+      while ( currentPtr != NULL && termOrder > 0 && previousPtr != NULL ) { 
+
+IMPORTANT ! If currentPtr->data is the first node, this node is empty, and strncmp() will CRASH becuse this is NULL.
+	
+/*==========================================================================*/
+2013. 10. 20	>> Week 6	>> Sunday
+when migrating from dev cpp to visual studio c++,
+put this into >> project properties >> C/C++ >> other include directory : C:\Dev-Cpp\include
+
+---
+
+蟲 [ B U G ] :
+ fatal error C1021: invalid preprocessor command 'include_next'，
+[ Solution ] : 
+In control pannel, msvc's include should be prior to mingw's include.
+ C:/Program Files/Microsoft Visual Studio/VC98/atl/include;C:/Program Files/Microsoft Visual Studio/VC98/mfc/include;C:/Program Files/Microsoft Visual Studio/VC98/include;C:/Modeltech_6.3f/include;C:/Program Files/Microsoft DirectX 9.0 SDK (February 2005)/Samples/C++/DirectShow/Samples/C++/DirectShow/BaseClasses;C:/Modeltech_6.3f/gcc-3.3.1-mingw32/include
+
+ ( tutorial : http://blog.csdn.net/aboy85/article/details/4208915 )
  
- */
-
-
-/* Ver. 15	-	compareTerm.cpp
-
-1.)
-Don't use the official strncmp/strcmp anymore.
-Why not write a compare_term( ) function yourself? 
-別用官方的 strncmp，何不乾脆自己寫一個 compare_term( ) ? 
-
-2.)
-[結果]
-strlen(s1) = 5
-strlen(s2) = 5
-[說明]
-strlen():回傳字串的長度("不"包括terminated null character)
+---
  
- */
+蟲 [ B U G ] : 
+when I do rmvStop() in a loop in main() many times, at first, the program runs well.
+but in the 4-th loop, main() can't recive a succussful-return from rmvStop().
+[ Solution ] : 
+So I print out some codes in rmvStop().
+And then I observed that, 
 
-
-/* Ver. 11 - dictCpp.cpp
-
-1.)
-still fighting with merge_dictionary( )
-but the other functions are OK now :D
-
-2.)
-the variable names must be consistemt with sort_firstDict.cpp
-Therfore, every "item" in Version.10 will be transformed to "data.c_str()" in Version.11
-
-
-3.)
-Ver 10 : strncpy( tail->nextPtr->item, h2->item, MAX_STR_LEN );
-Ver 11 : strncpy( const_cast<char*>(tail->nextPtr->data.c_str()), h2->data.c_str(), MAX_STR_LEN );
-
- */
+	...
+	stopNum is :  319  .
+	tokenSize is : 300 .
+	...
+	stopNum is :  638  .
+	tokenSize is : 300 .
+	...
+	stopNum is :  957  .
+	tokenSize is : 300 .
  
- /*
-Ver. 11
-
-1.)
-I don't use arrayname[ ] declaration.
-Instead, use std::string stringname declaration.
-
-
-2.)
-pass vlue instead of pass address
-previous ver: void insertNode( ListNodePtr *sPtr, std::string value )
-now ver : void insertNode( ListNodePtr sPtr, std::string value )
-
-*/
-
- /* ver. 7
-
-for ver.8 : be aware that for testing purpose, the loop in main 
-only execute 5 times rather than DICT_SIZE times.
-
-1.)
-Nicole creates dictionaryCpp.cpp .
-
-2.) 
-add this line of code in rmvStop( ) : clear_array( token );
-
-3.)
-For stopwordfile.txt,
-main( ) knows the existence of function txtToAarray( ).
-But for every xxx.txt,
-main( ) DOES NOT KNOW the existence of function txtToAarray( ).
-Only rmvStop( ) knows it.
-
-4.)
-porter( ) now recives one more argument : FILE * f 
-Therefore, this line of code is discarded in porter( ) : 
-		f = fopen( "afile.txt" ,"r");
-And then, these lines of code are added into main( ) :
-		FILE * stemFile;    pointer stemFile will be passed to poter( ) 
-		stemFile = fopen( "afile.txt" ,"r");
-  		porter( 1, stemByPorter, tokenSize, stemFile );
-  		fclose(stemFile);
-  		
-5.) 
-Nicole adds this line of code in porter( ) : 	rewind(f);
-( Because if f is not rewound, then int & tokenSize won't get the correct value )
- */
-
- /*--------------------------------------------*/
- /* ver. 6
-1.)
-Nicole turns the local variable declaration into global variable declaration.
-我突然覺得該不會是要把所有變數都變成 global 的吧 !!  
-2.)
-	Nicole modified names of some variables in txtToArray( ) .
-	For example : 
-   char tempCharacter_tTA;  
-	_tTA is the abbrev. for _textToArray 
-3.)
-in txtToArray(), I must reset stopNum to zero.
-4.)
+Therefore, in txtToArray(), I must reset stopNum to zero.
+SO COOL !!!!!!!  The bug is fixed !!!
+ 
+--- 
+ 
+蟲 [ B U G ] : 
+I need to press "Enter" key on keyboard 1095 times for the for-loop in main( ) to loop 1095 times.
+Solution : 
+Yeah ! Nicole debugs successfully by herself ! 
 Discard this line in porter.cpp : system("PAUSE");
-5.)
-Must add this line of code in function txtToArray( ) : 
+
+---
+
+蟲 [ B U G ] :
+Too many open files 
+In iteration xxxx i get an "Too many open files" error when opening the xxxx-th file.
+Solution : 
+Yeah ! Nicole debugs successfully by herself ! 
+Nicole must add this line of code in function txtToArray( ) : 
 	   fclose(txtFile);
- */
- 
- 	/*--------------------------------------------*/
- 
+
+Ha~ Don't forget that txtFile is declared 1095 times because everytime when txtToArray( ) is entered, 
+this line will declare again txtFile : void txtToArray( FILE *txtFile, char twoDimArr[][ MAX_STR_LEN ], int & wordCount )	 
+Ha~ Just be careful !   
+	   
+	   
+---	   
+	   

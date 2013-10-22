@@ -59,7 +59,7 @@ int compare_term( const char *inputStr1, const char *inputStr2  )
 	
 	
 	
-	/**************************************************** M A G I C ***/
+	/**************************************************** M A G I C ***
 	printf("\nHello compare_term >> term1 is >> %s.", term1 );
 	printf("\nHello compare_term >> term2 is >> %s.", term2 );
 	/*******************************************************/
@@ -129,22 +129,7 @@ int compare_term( const char *inputStr1, const char *inputStr2  )
 	}
 }						/* end compare_term( )  */
 
-/*
-int main(){
-	
-	char term1[ MAX_STR_LEN ];
-	char term2[ MAX_STR_LEN ];
 
-
-	strncpy( term1, "Happy", MAX_STR_LEN );
-	strncpy( term2, "Happen", MAX_STR_LEN );
-	
-	compare_term( term1, term2 );
-	
-	system("PAUSE");
-
-}
-*/
 int main3()
 {
 	int cmpResultAB; /* compare result of compare_term( ) */

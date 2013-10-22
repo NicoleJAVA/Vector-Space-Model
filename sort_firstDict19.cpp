@@ -1,11 +1,17 @@
 /*
-Ver. 20 - sort_firstDict.cpp
+Ver. 19 - sort_firstDict.cpp
 
 1.)
-			previousPtr = new ListNode;
-			previousPtr->nextPtr = sPtr;
+Ver. 19  >> remove debug info.
 
+2.) 
+Ver. 19  >> except insertNode(), all the other operations of listnode are move
+to nodeoperation.cpp 
 
+3.)
+Ver 19 >> 
+Wrong code : strncpy( newPtr->data.c_str(), value.c_str(), SORT_LEN );
+Correct code : strncpy( const_cast<char*>(newPtr->data.c_str()), value.c_str(), SORT_LEN );
 */
 
    
@@ -73,18 +79,13 @@ void insertNode( ListNodePtr &sPtr, std::string value, int index )
 				printf("\n第 %d 個。\n傳進來的 dictPtr 是 NULL\n ", index);
 			}
 			else{
-				if(index<5){
-					printf("\n第 %d 個。\n傳進來的 dictPtr 不是 NULL ", index);
-					printf("   --->  main()傳進來的 dictNode字串 : %s." , sPtr->data.c_str() );
-				} // END if
-			} // end else
+				if(index<5){printf("\n第 %d 個。\n傳進來的 dictPtr 不是 NULL ", index);} }
 			/******************************************************/
 		
 		strncpy( const_cast<char*>(newPtr->data.c_str()), value.c_str(), SORT_LEN );
       newPtr->nextPtr = NULL; /* node does not link to another node */
-		if ( index == 0 ){
-			printf("\n\n所以呢現在 newPtr 是 %s.\n\n", newPtr->data.c_str() ); 
-		} 
+
+		
       previousPtr = NULL;
       currentPtr = sPtr;
 
@@ -95,7 +96,7 @@ void insertNode( ListNodePtr &sPtr, std::string value, int index )
 			else{
 				if(index<5){
 					printf("\n第 %d 個。\ncurrentPtr 不是 NULL。 ", index);
-					printf("---> 字串 : %s." , currentPtr->data.c_str() );
+					printf("   --->  字串 : %s." , currentPtr->data.c_str() );
 					} // end if 
 					
 			} // end else
@@ -115,8 +116,7 @@ void insertNode( ListNodePtr &sPtr, std::string value, int index )
 		if( currentPtr != NULL ) {
       // loop to find the correct location in the list 
       // Ver. 14 嘗試修改 : while ( currentPtr != NULL && termOrder > 0 && previousPtr != NULL ) { 
-		// Ver. 19 : while ( currentPtr != NULL && termOrder == 0 ) { 
-		while ( currentPtr != NULL ) { 
+		while ( currentPtr != NULL && termOrder == 0 ) { 
 			//printf("\n從現在開始 previousPtr 才會開始不為 NULL 喔" );
          previousPtr = currentPtr;          //* walk to ...   
          currentPtr = currentPtr->nextPtr;  //* ... next node 
@@ -124,38 +124,19 @@ void insertNode( ListNodePtr &sPtr, std::string value, int index )
 		}					//* END if */
 		/**************************************/
 		
-		
-		
-		
-		
       /* insert new node at beginning of list */
       if ( previousPtr == NULL ) {
 			//printf("\nS P E C I A L   C A S E : first listNode to be inserted." ); 
 			//printf("\npreviousPtr 是 NULL 所以是第一個唷" ); 
-			
-			/********************	開始註解		******************/
-				if(index<5){
-					printf("\n第 %d 個。 previousPtr 是 NULL。 ", index);
-					//printf("   --->  字串 : %s." , currentPtr->data.c_str() );
-					} // end if 			
-			/**************************************/
-			
-			
          newPtr->nextPtr = sPtr;
          
          
 			
 			/******************************************  M  G  I  C  */
 			sPtr = newPtr;
-			printf("\n所以現在 sPtr 是 %s.", sPtr->data.c_str() ); 
-			
 			/******************************************  M  G  I  C  */
-			printf("\n HELOO" );
 			
-			previousPtr = new ListNode;
-			previousPtr->nextPtr = sPtr;
 			
-			printf("\n HELOO  HELOO HELOO HELOO HELOO HELOO" );
 			
       }					/* end if */
       else { /* insert new node between previousPtr and currentPtr */

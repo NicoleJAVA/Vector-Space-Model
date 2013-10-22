@@ -89,19 +89,24 @@ int main()
 		rewind(stemFile);
   		porter( 1, stemByPorter, tokenSize, stemFile );
   		fclose(stemFile);
-  		printf("\n成功執行波特了.   ");
-		printf("And tokenSize is %d\n", tokenSize );
+  		
+		printf("After porter(), tokenSize is %d\n", tokenSize );
   		
 	/* pre-condition : after porter() is done, stemByPorter[][] now */
 	/* holds the stemming result of afile.txt. */					
 	/* pre-condition : tokenSize is correctly updated*/					
 					
+					
+					/*              H E L L O                      */
+					
+					
+					
 	printf("\n先把字典變成 listnode"); 
 	/* Ver. 14 開始, deprecate 這行 : arrayToListNode( stemByPorter, tokenSize, dictNode ); */ 
 	/* Ver. 14 開始, deprecate 這行 : arrayToDict( stemByPorter, tokenSize, dictNode ); */
 	for( i = 0; i < tokenSize; i++ ){
-		printf("先看看作業 1 的 stemByPorter[i] 是 %s.", stemByPorter[i] ); 
-		insertNode( dictNode, stemByPorter[ i ] );
+		//printf("先看看作業 1 的 stemByPorter[i] 是 %s.", stemByPorter[i] ); 
+		insertNode( dictNode, stemByPorter[ i ], i );
 	}					/* end for */	
 
  		/*--------------------------------------------------------*/ 
