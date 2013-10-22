@@ -1,10 +1,7 @@
 /*
-Ver. 20 - sort_firstDict.cpp
+Ver. 22 - sort_firstDict.cpp
 
-1.)
-			previousPtr = new ListNode;
-			previousPtr->nextPtr = sPtr;
-
+1.) 
 
 */
 
@@ -43,16 +40,17 @@ int isEmpty( ListNodePtr sPtr );
 void printList( ListNodePtr currentPtr );
 void instructions( void );
 
-
+ListNode *globMem = NULL;
 
 /****************************************************************************/ 
 
 /* Insert a new value into the list in sorted order */
 void insertNode( ListNodePtr &sPtr, std::string value, int index )
 { 
+	printf("\n\n\n Hello insert >> index is %d.", index );
+
 	char chbuf[ 1000 ];
 	strncpy( chbuf, value.c_str(), 1000 );
-	//printf("\n\n嗨	嗨	嗨	嗨	嗨	嗨	sPtr is %s.", chbuf ); 
 	
    ListNodePtr newPtr;      /* pointer to new node */
    ListNodePtr previousPtr; /* pointer to previous node in list */
@@ -61,59 +59,37 @@ void insertNode( ListNodePtr &sPtr, std::string value, int index )
    int currDataSize ;
 	char buf1[ SORT_LEN ];
 	char buf2[ SORT_LEN ];
-   // original code : newPtr = (ListNode *) malloc( sizeof( ListNode ) ); /* create node */
-	newPtr = new ListNode; /* new will return the address */
-	
-	/*									->		if newPtr is space available */
 
-   	if ( newPtr != NULL ) { //printf("\n 若 newPtr 的記憶體是 ok 的 " );
+	newPtr = new ListNode; /* new will return the address */
+	/*	->		if newPtr is space available */
+   if ( newPtr != NULL ) { //printf("\n 若 newPtr 的記憶體是 ok 的 " );
    	
-			/************************************	開始註解		******************/
-			if( sPtr == NULL ){
-				printf("\n第 %d 個。\n傳進來的 dictPtr 是 NULL\n ", index);
-			}
-			else{
-				if(index<5){
-					printf("\n第 %d 個。\n傳進來的 dictPtr 不是 NULL ", index);
-					printf("   --->  main()傳進來的 dictNode字串 : %s." , sPtr->data.c_str() );
-				} // END if
-			} // end else
-			/******************************************************/
-		
 		strncpy( const_cast<char*>(newPtr->data.c_str()), value.c_str(), SORT_LEN );
       newPtr->nextPtr = NULL; /* node does not link to another node */
-		if ( index == 0 ){
-			printf("\n\n所以呢現在 newPtr 是 %s.\n\n", newPtr->data.c_str() ); 
-		} 
       previousPtr = NULL;
       currentPtr = sPtr;
+   	if( sPtr == NULL ){
+				printf( "\n\n\n傳進來的是 NULL\n\n\n ");
+				sPtr = new ListNode;
+				if(sPtr == NULL ){printf("\n\n FAIL TO ALLOC sPtr");}
+		}	
+	
 
-			/************************************	開始註解		******************/
-			if( currentPtr == NULL ){
-				printf("\n第 %d 個。\n currentPtr 是 NULL\n ", index);
-			}
-			else{
-				if(index<5){
-					printf("\n第 %d 個。\ncurrentPtr 不是 NULL。 ", index);
-					printf("---> 字串 : %s." , currentPtr->data.c_str() );
-					} // end if 
-					
-			} // end else
-				
-			/******************************************************/
-
-
+      			/******************************************************/
 
 		if( currentPtr != NULL ){
 			strncpy( buf1, value.c_str(), SORT_LEN );
-			strncpy( buf2, currentPtr->data.c_str(), SORT_LEN );
-			termOrder = compare_term( sPtr->data.c_str(), value.c_str() );
+			strncpy( buf2, currentPtr->nextPtr->data.c_str(), SORT_LEN );			
+			/******************************************************/
+			termOrder = compare_term( currentPtr->data.c_str(), value.c_str(), index );
 			//printf("\n完成了字串比對. termOrder 是  %d", termOrder); 
+			/******************************************************/
+			
 		}
 	
+	
+	
 		/********************	開始註解		******************/
-		if( currentPtr != NULL ) {
-      // loop to find the correct location in the list 
       // Ver. 14 嘗試修改 : while ( currentPtr != NULL && termOrder > 0 && previousPtr != NULL ) { 
 		// Ver. 19 : while ( currentPtr != NULL && termOrder == 0 ) { 
 		while ( currentPtr != NULL ) { 
@@ -121,7 +97,7 @@ void insertNode( ListNodePtr &sPtr, std::string value, int index )
          previousPtr = currentPtr;          //* walk to ...   
          currentPtr = currentPtr->nextPtr;  //* ... next node 
       }					//* end while 
-		}					//* END if */
+		
 		/**************************************/
 		
 		
@@ -130,32 +106,17 @@ void insertNode( ListNodePtr &sPtr, std::string value, int index )
 		
       /* insert new node at beginning of list */
       if ( previousPtr == NULL ) {
-			//printf("\nS P E C I A L   C A S E : first listNode to be inserted." ); 
-			//printf("\npreviousPtr 是 NULL 所以是第一個唷" ); 
-			
-			/********************	開始註解		******************/
-				if(index<5){
-					printf("\n第 %d 個。 previousPtr 是 NULL。 ", index);
-					//printf("   --->  字串 : %s." , currentPtr->data.c_str() );
-					} // end if 			
-			/**************************************/
-			
-			
          newPtr->nextPtr = sPtr;
-         
-         
+         sPtr->nextPtr = newPtr;
+  			
+			/******************************************  M  G  I  C  */
+			
 			
 			/******************************************  M  G  I  C  */
-			sPtr = newPtr;
-			printf("\n所以現在 sPtr 是 %s.", sPtr->data.c_str() ); 
-			
-			/******************************************  M  G  I  C  */
-			printf("\n HELOO" );
-			
+			printf("\n HELOO" );			
 			previousPtr = new ListNode;
-			previousPtr->nextPtr = sPtr;
-			
-			printf("\n HELOO  HELOO HELOO HELOO HELOO HELOO" );
+			previousPtr->nextPtr = sPtr;			
+			printf("\n -----------------------\n\n\n" );
 			
       }					/* end if */
       else { /* insert new node between previousPtr and currentPtr */
