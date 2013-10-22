@@ -1,7 +1,9 @@
-/* ver. 19
+/* ver. 14
 
 1.)
-Ver. 19 : all stuff of homework-1 is cut-and-paste to rmvstop.cpp file.
+Ver. 14 : delete this function : duplicate_currDict( ) 
+And only use insertNode( ) to handle the node insertion 
+Niole >> 我想整個 刪掉 duplicate_currDict( )  這個函數，假裝它從未存在 
 	
 */
 #include <stdio.h>
@@ -10,12 +12,10 @@ Ver. 19 : all stuff of homework-1 is cut-and-paste to rmvstop.cpp file.
 #include <strings.h>
 #include <unistd.h>
 #include <ctype.h>
-#include "rmvstop.cpp"
-//			#include "porter.cpp"
+#include "porter.cpp"
 #include "dictCpp.cpp"
 #include "sort_firstDict.cpp"
 #include "ir.hpp"
-
 
 #define MAX_STR_LEN 30
 #define MAX_STOP_SIZE 500
@@ -30,13 +30,22 @@ using namespace std;
 
 
 
-/*------------------------------------------------*/
+/***********************************************************/
+using namespace std;
+
+
+
+/******************************************************************************/
+
 int main()
 {
 	FILE * stopFile;
 	FILE * aFile;
 	FILE * stemFile; /* pointer stemFile will be passed to poter( ) */
 	ListNode *dictNode; /* dictionary list node */
+	
+
+	
    char stopArr[ MAX_STOP_SIZE ][ MAX_STR_LEN ];
    char article[ 10000 ][ MAX_STR_LEN ];
    char check[ 10000 ][ MAX_STR_LEN ];
@@ -53,13 +62,32 @@ int main()
    int currDictSize = 0;
    int i = 0;
    
+   
+   
+   char * buf = "s""p";
+   char buf2[ MAX_STR_LEN ];
+   /* 哇哈哈哈哈哈哈哈 竟然這麼爽快 */
+   itoa( 2, buf2, 10 );
+  
+   string sym( 1, buf2[0] );
+	const char * CONST_firstHalfOfFileName;
+	CONST_firstHalfOfFileName = sym.c_str();
+   const char * stopwordfile ;
+	stopwordfile = CONST_firstHalfOfFileName;
+	
+	/*正確 : stopwordfile = CONST_firstHalfOfFileName; */
+	/* 錯誤 : stopwordfile = CONST_firstHalfOfFileName + "Hello World"; */
+   
+	
+	
 	stopFile=fopen( "stopwordfile.txt", "r" );
    txtToArray( stopFile, stopArr, stopSize );    
  
+ 							
+							 
 							 
 							 
 							 	/* Testing arrayToListNode */
- 
  
  
 	printf("\n\n\n\n\n			------------------------------" );
@@ -113,20 +141,7 @@ int main()
  
  
  
- 
- 
- 
- 
  							 	/*  E N D - Testing arrayToListNode - E N D - */
- 
- 
- 
- 
- 
- 
- 
- 
- 
  
  
  
@@ -199,3 +214,139 @@ for( int docLoop = 1; docLoop <= 0; docLoop ++ )
 	printf( "          -------------\n\n\n\n\n\n\n\n\n\n\n\n\n" );		
    system("PAUSE");
 } /* End main( ) */ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/******************************************************************************/
+void clear_array( char inputArr[ ][ MAX_STR_LEN ] ){ 
+	int i = 0;
+	int j = 0;
+	for( i = 0; i < MAX_WORD_NUM; i++  ){
+		for( j = 0; j < MAX_STR_LEN; j++ ){
+			inputArr[i][j] = '\0';
+		} // End 2-for
+	} // End-1-for
+}
+
+/******************************************************************************/
+
+   char tempCharacter_tTA;  /* _tTA is the abbrev. for _textToArray */  
+   char  oneDimArr[10000];
+   char temp_tTA[ MAX_STR_LEN ];
+   char *tokenPtr_tTA;
+   int twoDim_i = 0;
+   int i = 0;
+
+/* ~ ~ ~ ~ ~ ~ ~ ~ */
+void txtToArray( FILE *txtFile, char twoDimArr[][ MAX_STR_LEN ], int & wordCount )
+{
+
+	/* wordCout must be reset to zero ! */ 
+	wordCount = 0; 
+   twoDim_i = 0;
+   i = 0;
+/*--------------------------------------------*/
+  if ( txtFile==NULL ) perror ( "\nIn txtToArray : File Cannot Be Opened.\n" );
+  else
+  {
+    do {
+      tempCharacter_tTA = fgetc ( txtFile );
+      oneDimArr[ i ] = tempCharacter_tTA;
+      if ( tempCharacter_tTA == '\n' ){
+         oneDimArr[ i ] = ' ';
+      }
+      i++;
+    } while ( tempCharacter_tTA != EOF);
+    oneDimArr[ i ] = tempCharacter_tTA;
+	/*--------------------------------------------*/
+	}	
+	
+	tokenPtr_tTA = strtok( oneDimArr, " ,.-" );
+	while( tokenPtr_tTA != NULL  ){
+		strncpy( &temp_tTA[ 0 ], tokenPtr_tTA, MAX_STR_LEN );
+		strncpy( twoDimArr[ twoDim_i ], temp_tTA, MAX_STR_LEN ); 
+		i++;
+		tokenPtr_tTA = strtok( NULL, " ,.-" );
+		twoDim_i ++;
+		wordCount ++;
+	}
+   fclose(txtFile);
+} /* End txtToArray( ) */
+
+/******************************************************************************/
+/* ~ ~ ~ ~ ~ ~ */ 
+   FILE * pFile;
+   char tempCharacter;
+   /* int i = 0; */
+   int n = 0;
+   char content[10000];
+   int tokenNum = 0;
+	int stop_i = 0;
+	int token_i = 0;
+	int token_j = 0;
+	int rmv_i = 0;
+	int tokenIndex = 0;
+	int tokenCount = 0;
+	int temp_i = 0;
+	int flag = APPEND;
+   char * tokenPtr;  
+	char temp[ MAX_STR_LEN ];
+	char token[ 10000 ][ MAX_STR_LEN ];
+/* ~ ~ ~ ~ ~ ~ */ 
+int rmvStop( char rmvStop[][ MAX_STR_LEN ], char stopList[][ MAX_STR_LEN ], int & stopNum, int & tokenSize )
+{
+
+   tokenSize = 0; /* tokenSize must be reset to zero ! */
+   i = 0;
+   n = 0;
+	stop_i = 0;
+ 	token_i = 0;
+ 	token_j = 0;
+	rmv_i = 0;
+	tokenIndex = 0;
+	tokenCount = 0;
+	temp_i = 0;
+	flag = APPEND;
+	pFile=fopen ("input.txt","r");
+	
+  if (pFile==NULL) perror ("\nIn rmvStop( ) : Error opening file");
+  else{
+		
+		clear_array( token );
+		
+		txtToArray( pFile, token, tokenSize );
+
+		fclose (pFile);
+
+	printf("\nIn rmvStop( ) : After txtToArray( ) tokenSize is : %d .", tokenSize );
+	/*-------------------------------------------------------------*/	
+	for ( token_i = 0; token_i < tokenSize; token_i++ ){
+		flag = APPEND;
+  		for ( stop_i = 0;  stop_i  <=  stopNum; stop_i++ ){
+			if ( !strcmp( token[ token_i ], stopList[ stop_i ] ) ){
+				flag = RMV;
+			} // END if
+		} //END for
+		if( flag == APPEND ){
+			strncpy( rmvStop[ rmv_i ], token[ token_i ], MAX_STR_LEN );
+			rmv_i ++;		
+		} // END if
+
+	} // END for
+
+	rmvStop[ rmv_i ][0] = '\0';
+  } // END fopen( );
+  return 0;
+}
